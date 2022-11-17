@@ -27,12 +27,22 @@ namespace Circus.Pages
 
         private void lvPerfomances_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            ApplyFiltres();
         }
 
         private void cbSorting_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ApplyFiltres();
+        }
 
+        private void checkActual_Checked(object sender, RoutedEventArgs e)
+        {
+            ApplyFiltres();
+        }
+
+        private void ApplyFiltres()
+        {
+            throw new NotImplementedException();
         }
     }
 }

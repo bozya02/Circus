@@ -31,7 +31,7 @@
                       ItemsSource="{Binding Sortings}"
                       SelectionChanged="cbSorting_SelectionChanged"/>
 
-            <CheckBox Grid.Column="2" Content="Только предстоящие"/>
+            <CheckBox x:Name="checkActual" Grid.Column="2" Content="Только предстоящие" Checked="checkActual_Checked"/>
         </Grid>
 
         <ListView x:Name="lvPerfomances" ItemsSource="{Binding Perfomances}"
