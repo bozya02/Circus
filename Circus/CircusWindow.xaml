@@ -28,6 +28,8 @@
             </StackPanel>
         </Grid>
 
-        <Frame x:Name="frameNav" Grid.Row="1" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="frameNav" Grid.Row="1"
+               Padding="10"
+               NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

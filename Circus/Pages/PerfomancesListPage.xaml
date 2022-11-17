@@ -3,12 +3,45 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:Circus.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Список выступлений">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox x:Name="tbSearch" Margin="10" Padding="5"
+                     materialDesign:HintAssist.Hint="Поиск"/>
+
+            <ComboBox x:Name="cbSorting" Grid.Column="1"
+                      Margin="10"
+                      materialDesign:HintAssist.Hint="Сортировка"
+                      ItemsSource="{Binding Sortings}"
+                      SelectionChanged="cbSorting_SelectionChanged"/>
+
+            <CheckBox Grid.Column="2" Content="Только предстоящие"/>
+        </Grid>
+
+        <ListView x:Name="lvPerfomances" ItemsSource="{Binding Perfomances}"
+                  Grid.Row="1"
+                  SelectionChanged="lvPerfomances_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Page>

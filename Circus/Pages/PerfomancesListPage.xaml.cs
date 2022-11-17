@@ -24,5 +24,15 @@ namespace Circus.Pages
         {
             InitializeComponent();
         }
+
+        private void lvPerfomances_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void cbSorting_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

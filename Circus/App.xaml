@@ -43,7 +43,8 @@
             </Style>
 
             <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
-                <Setter Property="Padding" Value="10"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="FontSize" Value="30"/>
             </Style>
 
             <Style TargetType="ListView" BasedOn="{StaticResource MaterialDesignListView}">
@@ -57,6 +58,8 @@
             <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignChoiceChipPrimaryOutlineRadioButton}">
                 <Setter Property="FontSize" Value="24"/>
             </Style>
+
+            <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignSwitchToggleButton}"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
