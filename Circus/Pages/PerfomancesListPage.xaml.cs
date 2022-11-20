@@ -61,12 +61,22 @@ namespace Circus.Pages
             ApplyFiltres();
         }
 
+        private void cbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFiltres();
+        }
+
+        private void tbSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplyFiltres();
+        }
+
         private void ApplyFiltres()
         {
             var perfomanceName = tbSearch.Text.ToLower();
             var isActual = checkActual.IsChecked;
             var sorting = Sortings[cbSorting.SelectedItem as string];
-            var city = cbCities.SelectedItem as City;
+            var city = cbCity.SelectedItem as City;
 
             if (sorting == null || city == null)
                 return;
@@ -81,11 +91,6 @@ namespace Circus.Pages
 
             lvPerfomances.ItemsSource = perfomances;
             lvPerfomances.Items.Refresh();
-        }
-
-        private void cbCities_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ApplyFiltres();
         }
     }
 }

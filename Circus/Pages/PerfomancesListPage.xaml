@@ -20,25 +20,30 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
             <TextBox x:Name="tbSearch" Margin="10" Padding="5"
-                     materialDesign:HintAssist.Hint="Поиск"/>
+                     materialDesign:HintAssist.Hint="Поиск"
+                     TextChanged="tbSearch_TextChanged"/>
 
             <ComboBox x:Name="cbSorting" Grid.Column="1"
                       Margin="10"
                       materialDesign:HintAssist.Hint="Сортировка"
                       ItemsSource="{Binding Sortings}"
+                      SelectedIndex="0"
                       SelectionChanged="cbSorting_SelectionChanged"/>
 
-            <ComboBox x:Name="cbCities" Grid.Column="2"
+            <ComboBox x:Name="cbCity" Grid.Column="2"
                       Margin="10"
                       materialDesign:HintAssist.Hint="Город"
                       ItemsSource="{Binding Cities}"
-                      SelectionChanged="cbCities_SelectionChanged"/>
+                      SelectedIndex="0"
+                      SelectionChanged="cbCity_SelectionChanged"/>
 
-            <CheckBox x:Name="checkActual" Grid.Column="3" Content="Только предстоящие" Click="checkActual_Click"/>
+            <CheckBox x:Name="checkActual" Content="Только предстоящие"
+                      Grid.Column="3" IsChecked="True"
+                      Click="checkActual_Click"/>
         </Grid>
 
         <ListView x:Name="lvPerfomances" ItemsSource="{Binding Perfomances}"

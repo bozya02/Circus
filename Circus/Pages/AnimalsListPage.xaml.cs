@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Circus.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,53 @@ namespace Circus.Pages
     /// </summary>
     public partial class AnimalsListPage : Page
     {
+        public List<Animal> Animals { get; set; }
+        public List<AnimalType> AnimalTypes { get; set; }
+
         public AnimalsListPage()
         {
             InitializeComponent();
+
+            Animals = DataAccess.GetAnimals();
+            AnimalTypes = DataAccess.GetAnimalTypes();
+
+            this.DataContext = this;
+        }
+
+        private void lvAnimals_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var animal = lvAnimals.SelectedItem as Animal;
+            if (animal != null)
+                NavigationService.Navigate(new AnimalPage(animal));
+        }
+
+        private void tbSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplyFiltres();
+        }
+
+        private void cbType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFiltres();
+        }
+
+        private void ApplyFiltres()
+        {
+            var animalName = tbSearch.Text.ToLower();
+            var type = cbType.SelectedItem as AnimalType;
+
+            if (type == null)
+                return;
+
+            var animals = Animals.FindAll(x => x.Name.ToLower().Contains(animalName) && x.AnimalType == type);
+
+            lvAnimals.ItemsSource = animals;
+            lvAnimals.Items.Refresh();
+        }
+
+        private void btnNewAnimal_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AnimalPage(new Animal(), true));
         }
     }
 }

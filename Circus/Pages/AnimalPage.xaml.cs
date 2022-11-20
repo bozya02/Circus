@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Circus.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,15 @@ namespace Circus.Pages
     /// </summary>
     public partial class AnimalPage : Page
     {
-        public AnimalPage()
+        public Animal Animal { get; set; }
+
+        public AnimalPage(Animal animal, bool isNew = false)
         {
             InitializeComponent();
+            
+            Animal = animal;
+
+            this.DataContext = this;
         }
     }
 }
