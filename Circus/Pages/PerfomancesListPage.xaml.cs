@@ -22,12 +22,26 @@ namespace Circus.Pages
     public partial class PerfomancesListPage : Page
     {
         public List<Perfomance> Perfomances { get; set; }
+        public List<City> Cities { get; set; }
+        public Dictionary<string, Func<Perfomance, object>> Sortings { get; set; }
 
         public PerfomancesListPage()
         {
             InitializeComponent();
 
             Perfomances = DataAccess.GetPerfomances();
+            Sortings = new Dictionary<string, Func<Perfomance, object>>
+            {
+                { "Без сортировки", x => x.Id },
+                { "Название по возрастания", x => x.Tickets },
+                { "Название по убыванию", x => x.Tickets },      //reverse
+                { "Цена билета по возрастания", x => x.Tickets },
+                { "Цена билета по убыванию", x => x.Tickets },      //reverse
+                { "Количество мест по возрастания", x => x.Tickets },
+                { "Количество мест по убыванию", x => x.City },      //reverse
+                { "Дата проведения по возрастания", x => x.Date },
+                { "Дата проведения по убыванию", x => x.Date },     //reserse
+            };
 
             this.DataContext = this;
         }
@@ -49,7 +63,29 @@ namespace Circus.Pages
 
         private void ApplyFiltres()
         {
-            throw new NotImplementedException();
+            var perfomanceName = tbSearch.Text.ToLower();
+            var isActual = checkActual.IsChecked;
+            var sorting = Sortings[cbSorting.SelectedItem as string];
+            var city = cbCities.SelectedItem as City;
+
+            if (sorting == null || city == null)
+                return;
+
+            var perfomances = Perfomances.FindAll(x => x.Name.ToLower().Contains(perfomanceName) &&
+                                                       x.Date > DateTime.Now && x.City == city);
+
+            perfomances = (cbSorting.SelectedItem as string).ToLower().Contains("убыванию") ? 
+                          perfomances.OrderBy(sorting).ToList() :
+                          perfomances.OrderByDescending(sorting).ToList();
+
+
+            lvPerfomances.ItemsSource = perfomances;
+            lvPerfomances.Items.Refresh();
+        }
+
+        private void cbCities_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFiltres();
         }
     }
 }
