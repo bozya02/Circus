@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Circus.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,15 @@ namespace Circus.Pages
     /// </summary>
     public partial class PerfomancesListPage : Page
     {
+        public List<Perfomance> Perfomances { get; set; }
+
         public PerfomancesListPage()
         {
             InitializeComponent();
+
+            Perfomances = DataAccess.GetPerfomances();
+
+            this.DataContext = this;
         }
 
         private void lvPerfomances_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -35,7 +42,7 @@ namespace Circus.Pages
             ApplyFiltres();
         }
 
-        private void checkActual_Checked(object sender, RoutedEventArgs e)
+        private void checkActual_Click(object sender, RoutedEventArgs e)
         {
             ApplyFiltres();
         }

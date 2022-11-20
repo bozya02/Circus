@@ -1,0 +1,534 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CircusModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Animal">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AnimalTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AnimalArtist">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AnimalId" Type="int" />
+          <Property Name="ArtistId" Type="int" />
+        </EntityType>
+        <EntityType Name="AnimalType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Artist">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ArtistPerfomance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArtistId" Type="int" Nullable="false" />
+          <Property Name="PerfomanceId" Type="int" Nullable="false" />
+          <Property Name="AnimalId" Type="int" />
+        </EntityType>
+        <EntityType Name="Perfomance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PerfomanceId" Type="int" />
+        </EntityType>
+        <Association Name="FK_Animal_AnimalType">
+          <End Role="AnimalType" Type="Self.AnimalType" Multiplicity="1" />
+          <End Role="Animal" Type="Self.Animal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AnimalType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Animal">
+              <PropertyRef Name="AnimalTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AnimalArtist_Animal">
+          <End Role="Animal" Type="Self.Animal" Multiplicity="0..1" />
+          <End Role="AnimalArtist" Type="Self.AnimalArtist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Animal">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AnimalArtist">
+              <PropertyRef Name="AnimalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AnimalArtist_Artist">
+          <End Role="Artist" Type="Self.Artist" Multiplicity="0..1" />
+          <End Role="AnimalArtist" Type="Self.AnimalArtist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artist">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AnimalArtist">
+              <PropertyRef Name="ArtistId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Artist_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Artist" Type="Self.Artist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Artist">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArtistPerfomance_Animal">
+          <End Role="Animal" Type="Self.Animal" Multiplicity="0..1" />
+          <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Animal">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArtistPerfomance">
+              <PropertyRef Name="AnimalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArtistPerfomance_Artist">
+          <End Role="Artist" Type="Self.Artist" Multiplicity="1" />
+          <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artist">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArtistPerfomance">
+              <PropertyRef Name="ArtistId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArtistPerfomance_Perfomance">
+          <End Role="Perfomance" Type="Self.Perfomance" Multiplicity="1" />
+          <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Perfomance">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArtistPerfomance">
+              <PropertyRef Name="PerfomanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_Perfomance">
+          <End Role="Perfomance" Type="Self.Perfomance" Multiplicity="0..1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Perfomance">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="PerfomanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CircusModelStoreContainer">
+          <EntitySet Name="Animal" EntityType="Self.Animal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AnimalArtist" EntityType="Self.AnimalArtist" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AnimalType" EntityType="Self.AnimalType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Artist" EntityType="Self.Artist" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ArtistPerfomance" EntityType="Self.ArtistPerfomance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Perfomance" EntityType="Self.Perfomance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Animal_AnimalType" Association="Self.FK_Animal_AnimalType">
+            <End Role="AnimalType" EntitySet="AnimalType" />
+            <End Role="Animal" EntitySet="Animal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnimalArtist_Animal" Association="Self.FK_AnimalArtist_Animal">
+            <End Role="Animal" EntitySet="Animal" />
+            <End Role="AnimalArtist" EntitySet="AnimalArtist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnimalArtist_Artist" Association="Self.FK_AnimalArtist_Artist">
+            <End Role="Artist" EntitySet="Artist" />
+            <End Role="AnimalArtist" EntitySet="AnimalArtist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Artist_Role" Association="Self.FK_Artist_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Artist" EntitySet="Artist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistPerfomance_Animal" Association="Self.FK_ArtistPerfomance_Animal">
+            <End Role="Animal" EntitySet="Animal" />
+            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistPerfomance_Artist" Association="Self.FK_ArtistPerfomance_Artist">
+            <End Role="Artist" EntitySet="Artist" />
+            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistPerfomance_Perfomance" Association="Self.FK_ArtistPerfomance_Perfomance">
+            <End Role="Perfomance" EntitySet="Perfomance" />
+            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_Perfomance" Association="Self.FK_Ticket_Perfomance">
+            <End Role="Perfomance" EntitySet="Perfomance" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CircusModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Animal">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AnimalTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AnimalType" Relationship="Self.FK_Animal_AnimalType" FromRole="Animal" ToRole="AnimalType" />
+          <NavigationProperty Name="AnimalArtists" Relationship="Self.FK_AnimalArtist_Animal" FromRole="Animal" ToRole="AnimalArtist" />
+          <NavigationProperty Name="ArtistPerfomances" Relationship="Self.FK_ArtistPerfomance_Animal" FromRole="Animal" ToRole="ArtistPerfomance" />
+        </EntityType>
+        <EntityType Name="AnimalArtist">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AnimalId" Type="Int32" />
+          <Property Name="ArtistId" Type="Int32" />
+          <NavigationProperty Name="Animal" Relationship="Self.FK_AnimalArtist_Animal" FromRole="AnimalArtist" ToRole="Animal" />
+          <NavigationProperty Name="Artist" Relationship="Self.FK_AnimalArtist_Artist" FromRole="AnimalArtist" ToRole="Artist" />
+        </EntityType>
+        <EntityType Name="AnimalType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Animals" Relationship="Self.FK_Animal_AnimalType" FromRole="AnimalType" ToRole="Animal" />
+        </EntityType>
+        <EntityType Name="Artist">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AnimalArtists" Relationship="Self.FK_AnimalArtist_Artist" FromRole="Artist" ToRole="AnimalArtist" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_Artist_Role" FromRole="Artist" ToRole="Role" />
+          <NavigationProperty Name="ArtistPerfomances" Relationship="Self.FK_ArtistPerfomance_Artist" FromRole="Artist" ToRole="ArtistPerfomance" />
+        </EntityType>
+        <EntityType Name="ArtistPerfomance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArtistId" Type="Int32" Nullable="false" />
+          <Property Name="PerfomanceId" Type="Int32" Nullable="false" />
+          <Property Name="AnimalId" Type="Int32" />
+          <NavigationProperty Name="Animal" Relationship="Self.FK_ArtistPerfomance_Animal" FromRole="ArtistPerfomance" ToRole="Animal" />
+          <NavigationProperty Name="Artist" Relationship="Self.FK_ArtistPerfomance_Artist" FromRole="ArtistPerfomance" ToRole="Artist" />
+          <NavigationProperty Name="Perfomance" Relationship="Self.FK_ArtistPerfomance_Perfomance" FromRole="ArtistPerfomance" ToRole="Perfomance" />
+        </EntityType>
+        <EntityType Name="Perfomance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ArtistPerfomances" Relationship="Self.FK_ArtistPerfomance_Perfomance" FromRole="Perfomance" ToRole="ArtistPerfomance" />
+          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Perfomance" FromRole="Perfomance" ToRole="Ticket" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Artists" Relationship="Self.FK_Artist_Role" FromRole="Role" ToRole="Artist" />
+        </EntityType>
+        <EntityType Name="Ticket">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PerfomanceId" Type="Int32" />
+          <NavigationProperty Name="Perfomance" Relationship="Self.FK_Ticket_Perfomance" FromRole="Ticket" ToRole="Perfomance" />
+        </EntityType>
+        <Association Name="FK_Animal_AnimalType">
+          <End Role="AnimalType" Type="Self.AnimalType" Multiplicity="1" />
+          <End Role="Animal" Type="Self.Animal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AnimalType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Animal">
+              <PropertyRef Name="AnimalTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AnimalArtist_Animal">
+          <End Role="Animal" Type="Self.Animal" Multiplicity="0..1" />
+          <End Role="AnimalArtist" Type="Self.AnimalArtist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Animal">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AnimalArtist">
+              <PropertyRef Name="AnimalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArtistPerfomance_Animal">
+          <End Role="Animal" Type="Self.Animal" Multiplicity="0..1" />
+          <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Animal">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArtistPerfomance">
+              <PropertyRef Name="AnimalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AnimalArtist_Artist">
+          <End Role="Artist" Type="Self.Artist" Multiplicity="0..1" />
+          <End Role="AnimalArtist" Type="Self.AnimalArtist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artist">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AnimalArtist">
+              <PropertyRef Name="ArtistId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Artist_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Artist" Type="Self.Artist" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Artist">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArtistPerfomance_Artist">
+          <End Role="Artist" Type="Self.Artist" Multiplicity="1" />
+          <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artist">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArtistPerfomance">
+              <PropertyRef Name="ArtistId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArtistPerfomance_Perfomance">
+          <End Role="Perfomance" Type="Self.Perfomance" Multiplicity="1" />
+          <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Perfomance">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArtistPerfomance">
+              <PropertyRef Name="PerfomanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ticket_Perfomance">
+          <End Role="Perfomance" Type="Self.Perfomance" Multiplicity="0..1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Perfomance">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="PerfomanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CircusEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Animals" EntityType="Self.Animal" />
+          <EntitySet Name="AnimalArtists" EntityType="Self.AnimalArtist" />
+          <EntitySet Name="AnimalTypes" EntityType="Self.AnimalType" />
+          <EntitySet Name="Artists" EntityType="Self.Artist" />
+          <EntitySet Name="ArtistPerfomances" EntityType="Self.ArtistPerfomance" />
+          <EntitySet Name="Perfomances" EntityType="Self.Perfomance" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="Tickets" EntityType="Self.Ticket" />
+          <AssociationSet Name="FK_Animal_AnimalType" Association="Self.FK_Animal_AnimalType">
+            <End Role="AnimalType" EntitySet="AnimalTypes" />
+            <End Role="Animal" EntitySet="Animals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnimalArtist_Animal" Association="Self.FK_AnimalArtist_Animal">
+            <End Role="Animal" EntitySet="Animals" />
+            <End Role="AnimalArtist" EntitySet="AnimalArtists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistPerfomance_Animal" Association="Self.FK_ArtistPerfomance_Animal">
+            <End Role="Animal" EntitySet="Animals" />
+            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnimalArtist_Artist" Association="Self.FK_AnimalArtist_Artist">
+            <End Role="Artist" EntitySet="Artists" />
+            <End Role="AnimalArtist" EntitySet="AnimalArtists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Artist_Role" Association="Self.FK_Artist_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Artist" EntitySet="Artists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistPerfomance_Artist" Association="Self.FK_ArtistPerfomance_Artist">
+            <End Role="Artist" EntitySet="Artists" />
+            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistPerfomance_Perfomance" Association="Self.FK_ArtistPerfomance_Perfomance">
+            <End Role="Perfomance" EntitySet="Perfomances" />
+            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_Perfomance" Association="Self.FK_Ticket_Perfomance">
+            <End Role="Perfomance" EntitySet="Perfomances" />
+            <End Role="Ticket" EntitySet="Tickets" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CircusModelStoreContainer" CdmEntityContainer="CircusEntities">
+          <EntitySetMapping Name="Animals">
+            <EntityTypeMapping TypeName="CircusModel.Animal">
+              <MappingFragment StoreEntitySet="Animal">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AnimalTypeId" ColumnName="AnimalTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AnimalArtists">
+            <EntityTypeMapping TypeName="CircusModel.AnimalArtist">
+              <MappingFragment StoreEntitySet="AnimalArtist">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AnimalId" ColumnName="AnimalId" />
+                <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AnimalTypes">
+            <EntityTypeMapping TypeName="CircusModel.AnimalType">
+              <MappingFragment StoreEntitySet="AnimalType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Artists">
+            <EntityTypeMapping TypeName="CircusModel.Artist">
+              <MappingFragment StoreEntitySet="Artist">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArtistPerfomances">
+            <EntityTypeMapping TypeName="CircusModel.ArtistPerfomance">
+              <MappingFragment StoreEntitySet="ArtistPerfomance">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
+                <ScalarProperty Name="PerfomanceId" ColumnName="PerfomanceId" />
+                <ScalarProperty Name="AnimalId" ColumnName="AnimalId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Perfomances">
+            <EntityTypeMapping TypeName="CircusModel.Perfomance">
+              <MappingFragment StoreEntitySet="Perfomance">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="CircusModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tickets">
+            <EntityTypeMapping TypeName="CircusModel.Ticket">
+              <MappingFragment StoreEntitySet="Ticket">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PerfomanceId" ColumnName="PerfomanceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
