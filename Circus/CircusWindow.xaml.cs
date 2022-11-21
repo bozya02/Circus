@@ -53,8 +53,6 @@ namespace Circus
                 spNavigation.Visibility = Visibility.Visible;
             }
 
-            if (App.User != null)
-                btnUsers.Visibility = App.User.IsAdmin ? Visibility.Visible : Visibility.Collapsed;
 
             tbTitle.Text = content.Title;
         }
@@ -85,11 +83,6 @@ namespace Circus
         private void btnArtists_Click(object sender, RoutedEventArgs e)
         {
             frame.NavigationService.Navigate(new ArtistsListPage());
-
-        }
-
-        private void btnUsers_Click(object sender, RoutedEventArgs e)
-        {
 
         }
     }
