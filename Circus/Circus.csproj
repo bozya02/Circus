@@ -149,14 +149,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CircusModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="DB\City.cs">
+      <DependentUpon>CircusModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\DataAccess.cs" />
     <Compile Include="DB\Perfomance.cs">
       <DependentUpon>CircusModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\PerfomancePartial.cs" />
     <Compile Include="DB\Role.cs">
       <DependentUpon>CircusModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\sysdiagram.cs">
+      <DependentUpon>CircusModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\Ticket.cs">
+      <DependentUpon>CircusModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\User.cs">
       <DependentUpon>CircusModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Pages\AnimalPage.xaml.cs">

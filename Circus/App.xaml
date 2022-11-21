@@ -44,7 +44,7 @@
 
             <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
                 <Setter Property="Padding" Value="5"/>
-                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontSize" Value="20"/>
             </Style>
 
             <Style TargetType="ListView" BasedOn="{StaticResource MaterialDesignListView}">

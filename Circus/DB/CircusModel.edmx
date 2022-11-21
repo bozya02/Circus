@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CircusModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CircusModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Animal">
           <Key>
             <PropertyRef Name="Id" />
@@ -37,6 +37,7 @@
           <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
           <Property Name="RoleId" Type="int" Nullable="false" />
+          <Property Name="Salary" Type="decimal" Precision="12" Scale="2" />
         </EntityType>
         <EntityType Name="ArtistPerfomance">
           <Key>
@@ -45,7 +46,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ArtistId" Type="int" Nullable="false" />
           <Property Name="PerfomanceId" Type="int" Nullable="false" />
-          <Property Name="AnimalId" Type="int" />
+          <Property Name="AnimalArtistId" Type="int" />
+        </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Perfomance">
           <Key>
@@ -53,7 +61,9 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CityId" Type="int" Nullable="false" />
+          <Property Name="Image" Type="varbinary(max)" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -62,12 +72,34 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="Ticket">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PerfomanceId" Type="int" />
+          <Property Name="UserId" Type="int" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Animal_AnimalType">
           <End Role="AnimalType" Type="Self.AnimalType" Multiplicity="1" />
@@ -117,15 +149,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ArtistPerfomance_Animal">
-          <End Role="Animal" Type="Self.Animal" Multiplicity="0..1" />
+        <Association Name="FK_ArtistPerfomance_AnimalArtist">
+          <End Role="AnimalArtist" Type="Self.AnimalArtist" Multiplicity="0..1" />
           <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Animal">
+            <Principal Role="AnimalArtist">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ArtistPerfomance">
-              <PropertyRef Name="AnimalId" />
+              <PropertyRef Name="AnimalArtistId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -153,6 +185,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Perfomance_City">
+          <End Role="City" Type="Self.City" Multiplicity="1" />
+          <End Role="Perfomance" Type="Self.Perfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Perfomance">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Ticket_Perfomance">
           <End Role="Perfomance" Type="Self.Perfomance" Multiplicity="0..1" />
           <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
@@ -165,15 +209,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Ticket_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CircusModelStoreContainer">
           <EntitySet Name="Animal" EntityType="Self.Animal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AnimalArtist" EntityType="Self.AnimalArtist" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AnimalType" EntityType="Self.AnimalType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Artist" EntityType="Self.Artist" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArtistPerfomance" EntityType="Self.ArtistPerfomance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Perfomance" EntityType="Self.Perfomance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Animal_AnimalType" Association="Self.FK_Animal_AnimalType">
             <End Role="AnimalType" EntitySet="AnimalType" />
             <End Role="Animal" EntitySet="Animal" />
@@ -190,8 +249,8 @@
             <End Role="Role" EntitySet="Role" />
             <End Role="Artist" EntitySet="Artist" />
           </AssociationSet>
-          <AssociationSet Name="FK_ArtistPerfomance_Animal" Association="Self.FK_ArtistPerfomance_Animal">
-            <End Role="Animal" EntitySet="Animal" />
+          <AssociationSet Name="FK_ArtistPerfomance_AnimalArtist" Association="Self.FK_ArtistPerfomance_AnimalArtist">
+            <End Role="AnimalArtist" EntitySet="AnimalArtist" />
             <End Role="ArtistPerfomance" EntitySet="ArtistPerfomance" />
           </AssociationSet>
           <AssociationSet Name="FK_ArtistPerfomance_Artist" Association="Self.FK_ArtistPerfomance_Artist">
@@ -202,26 +261,85 @@
             <End Role="Perfomance" EntitySet="Perfomance" />
             <End Role="ArtistPerfomance" EntitySet="ArtistPerfomance" />
           </AssociationSet>
+          <AssociationSet Name="FK_Perfomance_City" Association="Self.FK_Perfomance_City">
+            <End Role="City" EntitySet="City" />
+            <End Role="Perfomance" EntitySet="Perfomance" />
+          </AssociationSet>
           <AssociationSet Name="FK_Ticket_Perfomance" Association="Self.FK_Ticket_Perfomance">
             <End Role="Perfomance" EntitySet="Perfomance" />
             <End Role="Ticket" EntitySet="Ticket" />
           </AssociationSet>
+          <AssociationSet Name="FK_Ticket_User" Association="Self.FK_Ticket_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Ticket" EntitySet="Ticket" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CircusModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CircusEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Animals" EntityType="CircusModel.Animal" />
+          <EntitySet Name="AnimalArtists" EntityType="CircusModel.AnimalArtist" />
+          <EntitySet Name="AnimalTypes" EntityType="CircusModel.AnimalType" />
+          <EntitySet Name="Artists" EntityType="CircusModel.Artist" />
+          <EntitySet Name="ArtistPerfomances" EntityType="CircusModel.ArtistPerfomance" />
+          <EntitySet Name="Cities" EntityType="CircusModel.City" />
+          <EntitySet Name="Perfomances" EntityType="CircusModel.Perfomance" />
+          <EntitySet Name="Roles" EntityType="CircusModel.Role" />
+          <EntitySet Name="sysdiagrams" EntityType="CircusModel.sysdiagram" />
+          <EntitySet Name="Tickets" EntityType="CircusModel.Ticket" />
+          <EntitySet Name="Users" EntityType="CircusModel.User" />
+          <AssociationSet Name="FK_Animal_AnimalType" Association="CircusModel.FK_Animal_AnimalType">
+            <End Role="AnimalType" EntitySet="AnimalTypes" />
+            <End Role="Animal" EntitySet="Animals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnimalArtist_Animal" Association="CircusModel.FK_AnimalArtist_Animal">
+            <End Role="Animal" EntitySet="Animals" />
+            <End Role="AnimalArtist" EntitySet="AnimalArtists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AnimalArtist_Artist" Association="CircusModel.FK_AnimalArtist_Artist">
+            <End Role="Artist" EntitySet="Artists" />
+            <End Role="AnimalArtist" EntitySet="AnimalArtists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistPerfomance_AnimalArtist" Association="CircusModel.FK_ArtistPerfomance_AnimalArtist">
+            <End Role="AnimalArtist" EntitySet="AnimalArtists" />
+            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Artist_Role" Association="CircusModel.FK_Artist_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Artist" EntitySet="Artists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistPerfomance_Artist" Association="CircusModel.FK_ArtistPerfomance_Artist">
+            <End Role="Artist" EntitySet="Artists" />
+            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArtistPerfomance_Perfomance" Association="CircusModel.FK_ArtistPerfomance_Perfomance">
+            <End Role="Perfomance" EntitySet="Perfomances" />
+            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Perfomance_City" Association="CircusModel.FK_Perfomance_City">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="Perfomance" EntitySet="Perfomances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_Perfomance" Association="CircusModel.FK_Ticket_Perfomance">
+            <End Role="Perfomance" EntitySet="Perfomances" />
+            <End Role="Ticket" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ticket_User" Association="CircusModel.FK_Ticket_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Ticket" EntitySet="Tickets" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Animal">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AnimalTypeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="AnimalType" Relationship="Self.FK_Animal_AnimalType" FromRole="Animal" ToRole="AnimalType" />
-          <NavigationProperty Name="AnimalArtists" Relationship="Self.FK_AnimalArtist_Animal" FromRole="Animal" ToRole="AnimalArtist" />
-          <NavigationProperty Name="ArtistPerfomances" Relationship="Self.FK_ArtistPerfomance_Animal" FromRole="Animal" ToRole="ArtistPerfomance" />
+          <NavigationProperty Name="AnimalType" Relationship="CircusModel.FK_Animal_AnimalType" FromRole="Animal" ToRole="AnimalType" />
+          <NavigationProperty Name="AnimalArtists" Relationship="CircusModel.FK_AnimalArtist_Animal" FromRole="Animal" ToRole="AnimalArtist" />
         </EntityType>
         <EntityType Name="AnimalArtist">
           <Key>
@@ -230,29 +348,31 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AnimalId" Type="Int32" />
           <Property Name="ArtistId" Type="Int32" />
-          <NavigationProperty Name="Animal" Relationship="Self.FK_AnimalArtist_Animal" FromRole="AnimalArtist" ToRole="Animal" />
-          <NavigationProperty Name="Artist" Relationship="Self.FK_AnimalArtist_Artist" FromRole="AnimalArtist" ToRole="Artist" />
+          <NavigationProperty Name="Animal" Relationship="CircusModel.FK_AnimalArtist_Animal" FromRole="AnimalArtist" ToRole="Animal" />
+          <NavigationProperty Name="Artist" Relationship="CircusModel.FK_AnimalArtist_Artist" FromRole="AnimalArtist" ToRole="Artist" />
+          <NavigationProperty Name="ArtistPerfomances" Relationship="CircusModel.FK_ArtistPerfomance_AnimalArtist" FromRole="AnimalArtist" ToRole="ArtistPerfomance" />
         </EntityType>
         <EntityType Name="AnimalType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Animals" Relationship="Self.FK_Animal_AnimalType" FromRole="AnimalType" ToRole="Animal" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Animals" Relationship="CircusModel.FK_Animal_AnimalType" FromRole="AnimalType" ToRole="Animal" />
         </EntityType>
         <EntityType Name="Artist">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RoleId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="AnimalArtists" Relationship="Self.FK_AnimalArtist_Artist" FromRole="Artist" ToRole="AnimalArtist" />
-          <NavigationProperty Name="Role" Relationship="Self.FK_Artist_Role" FromRole="Artist" ToRole="Role" />
-          <NavigationProperty Name="ArtistPerfomances" Relationship="Self.FK_ArtistPerfomance_Artist" FromRole="Artist" ToRole="ArtistPerfomance" />
+          <Property Name="Salary" Type="Decimal" Precision="12" Scale="2" />
+          <NavigationProperty Name="AnimalArtists" Relationship="CircusModel.FK_AnimalArtist_Artist" FromRole="Artist" ToRole="AnimalArtist" />
+          <NavigationProperty Name="Role" Relationship="CircusModel.FK_Artist_Role" FromRole="Artist" ToRole="Role" />
+          <NavigationProperty Name="ArtistPerfomances" Relationship="CircusModel.FK_ArtistPerfomance_Artist" FromRole="Artist" ToRole="ArtistPerfomance" />
         </EntityType>
         <EntityType Name="ArtistPerfomance">
           <Key>
@@ -261,10 +381,18 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ArtistId" Type="Int32" Nullable="false" />
           <Property Name="PerfomanceId" Type="Int32" Nullable="false" />
-          <Property Name="AnimalId" Type="Int32" />
-          <NavigationProperty Name="Animal" Relationship="Self.FK_ArtistPerfomance_Animal" FromRole="ArtistPerfomance" ToRole="Animal" />
-          <NavigationProperty Name="Artist" Relationship="Self.FK_ArtistPerfomance_Artist" FromRole="ArtistPerfomance" ToRole="Artist" />
-          <NavigationProperty Name="Perfomance" Relationship="Self.FK_ArtistPerfomance_Perfomance" FromRole="ArtistPerfomance" ToRole="Perfomance" />
+          <Property Name="AnimalArtistId" Type="Int32" />
+          <NavigationProperty Name="AnimalArtist" Relationship="CircusModel.FK_ArtistPerfomance_AnimalArtist" FromRole="ArtistPerfomance" ToRole="AnimalArtist" />
+          <NavigationProperty Name="Artist" Relationship="CircusModel.FK_ArtistPerfomance_Artist" FromRole="ArtistPerfomance" ToRole="Artist" />
+          <NavigationProperty Name="Perfomance" Relationship="CircusModel.FK_ArtistPerfomance_Perfomance" FromRole="ArtistPerfomance" ToRole="Perfomance" />
+        </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Perfomances" Relationship="CircusModel.FK_Perfomance_City" FromRole="City" ToRole="Perfomance" />
         </EntityType>
         <EntityType Name="Perfomance">
           <Key>
@@ -272,17 +400,30 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="ArtistPerfomances" Relationship="Self.FK_ArtistPerfomance_Perfomance" FromRole="Perfomance" ToRole="ArtistPerfomance" />
-          <NavigationProperty Name="Tickets" Relationship="Self.FK_Ticket_Perfomance" FromRole="Perfomance" ToRole="Ticket" />
+          <Property Name="CityId" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="ArtistPerfomances" Relationship="CircusModel.FK_ArtistPerfomance_Perfomance" FromRole="Perfomance" ToRole="ArtistPerfomance" />
+          <NavigationProperty Name="City" Relationship="CircusModel.FK_Perfomance_City" FromRole="Perfomance" ToRole="City" />
+          <NavigationProperty Name="Tickets" Relationship="CircusModel.FK_Ticket_Perfomance" FromRole="Perfomance" ToRole="Ticket" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Artists" Relationship="Self.FK_Artist_Role" FromRole="Role" ToRole="Artist" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Artists" Relationship="CircusModel.FK_Artist_Role" FromRole="Role" ToRole="Artist" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="Ticket">
           <Key>
@@ -290,11 +431,25 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PerfomanceId" Type="Int32" />
-          <NavigationProperty Name="Perfomance" Relationship="Self.FK_Ticket_Perfomance" FromRole="Ticket" ToRole="Perfomance" />
+          <Property Name="UserId" Type="Int32" />
+          <NavigationProperty Name="Perfomance" Relationship="CircusModel.FK_Ticket_Perfomance" FromRole="Ticket" ToRole="Perfomance" />
+          <NavigationProperty Name="User" Relationship="CircusModel.FK_Ticket_User" FromRole="Ticket" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Tickets" Relationship="CircusModel.FK_Ticket_User" FromRole="User" ToRole="Ticket" />
         </EntityType>
         <Association Name="FK_Animal_AnimalType">
-          <End Role="AnimalType" Type="Self.AnimalType" Multiplicity="1" />
-          <End Role="Animal" Type="Self.Animal" Multiplicity="*" />
+          <End Type="CircusModel.AnimalType" Role="AnimalType" Multiplicity="1" />
+          <End Type="CircusModel.Animal" Role="Animal" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AnimalType">
               <PropertyRef Name="Id" />
@@ -305,8 +460,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AnimalArtist_Animal">
-          <End Role="Animal" Type="Self.Animal" Multiplicity="0..1" />
-          <End Role="AnimalArtist" Type="Self.AnimalArtist" Multiplicity="*" />
+          <End Type="CircusModel.Animal" Role="Animal" Multiplicity="0..1" />
+          <End Type="CircusModel.AnimalArtist" Role="AnimalArtist" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Animal">
               <PropertyRef Name="Id" />
@@ -316,21 +471,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ArtistPerfomance_Animal">
-          <End Role="Animal" Type="Self.Animal" Multiplicity="0..1" />
-          <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Animal">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ArtistPerfomance">
-              <PropertyRef Name="AnimalId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_AnimalArtist_Artist">
-          <End Role="Artist" Type="Self.Artist" Multiplicity="0..1" />
-          <End Role="AnimalArtist" Type="Self.AnimalArtist" Multiplicity="*" />
+          <End Type="CircusModel.Artist" Role="Artist" Multiplicity="0..1" />
+          <End Type="CircusModel.AnimalArtist" Role="AnimalArtist" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Artist">
               <PropertyRef Name="Id" />
@@ -340,9 +483,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ArtistPerfomance_AnimalArtist">
+          <End Type="CircusModel.AnimalArtist" Role="AnimalArtist" Multiplicity="0..1" />
+          <End Type="CircusModel.ArtistPerfomance" Role="ArtistPerfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AnimalArtist">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArtistPerfomance">
+              <PropertyRef Name="AnimalArtistId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Artist_Role">
-          <End Role="Role" Type="Self.Role" Multiplicity="1" />
-          <End Role="Artist" Type="Self.Artist" Multiplicity="*" />
+          <End Type="CircusModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="CircusModel.Artist" Role="Artist" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Role">
               <PropertyRef Name="Id" />
@@ -353,8 +508,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ArtistPerfomance_Artist">
-          <End Role="Artist" Type="Self.Artist" Multiplicity="1" />
-          <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
+          <End Type="CircusModel.Artist" Role="Artist" Multiplicity="1" />
+          <End Type="CircusModel.ArtistPerfomance" Role="ArtistPerfomance" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Artist">
               <PropertyRef Name="Id" />
@@ -365,8 +520,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ArtistPerfomance_Perfomance">
-          <End Role="Perfomance" Type="Self.Perfomance" Multiplicity="1" />
-          <End Role="ArtistPerfomance" Type="Self.ArtistPerfomance" Multiplicity="*" />
+          <End Type="CircusModel.Perfomance" Role="Perfomance" Multiplicity="1" />
+          <End Type="CircusModel.ArtistPerfomance" Role="ArtistPerfomance" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Perfomance">
               <PropertyRef Name="Id" />
@@ -376,9 +531,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Perfomance_City">
+          <End Type="CircusModel.City" Role="City" Multiplicity="1" />
+          <End Type="CircusModel.Perfomance" Role="Perfomance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Perfomance">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Ticket_Perfomance">
-          <End Role="Perfomance" Type="Self.Perfomance" Multiplicity="0..1" />
-          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
+          <End Type="CircusModel.Perfomance" Role="Perfomance" Multiplicity="0..1" />
+          <End Type="CircusModel.Ticket" Role="Ticket" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Perfomance">
               <PropertyRef Name="Id" />
@@ -388,48 +555,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="CircusEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Animals" EntityType="Self.Animal" />
-          <EntitySet Name="AnimalArtists" EntityType="Self.AnimalArtist" />
-          <EntitySet Name="AnimalTypes" EntityType="Self.AnimalType" />
-          <EntitySet Name="Artists" EntityType="Self.Artist" />
-          <EntitySet Name="ArtistPerfomances" EntityType="Self.ArtistPerfomance" />
-          <EntitySet Name="Perfomances" EntityType="Self.Perfomance" />
-          <EntitySet Name="Roles" EntityType="Self.Role" />
-          <EntitySet Name="Tickets" EntityType="Self.Ticket" />
-          <AssociationSet Name="FK_Animal_AnimalType" Association="Self.FK_Animal_AnimalType">
-            <End Role="AnimalType" EntitySet="AnimalTypes" />
-            <End Role="Animal" EntitySet="Animals" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AnimalArtist_Animal" Association="Self.FK_AnimalArtist_Animal">
-            <End Role="Animal" EntitySet="Animals" />
-            <End Role="AnimalArtist" EntitySet="AnimalArtists" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ArtistPerfomance_Animal" Association="Self.FK_ArtistPerfomance_Animal">
-            <End Role="Animal" EntitySet="Animals" />
-            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomances" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AnimalArtist_Artist" Association="Self.FK_AnimalArtist_Artist">
-            <End Role="Artist" EntitySet="Artists" />
-            <End Role="AnimalArtist" EntitySet="AnimalArtists" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Artist_Role" Association="Self.FK_Artist_Role">
-            <End Role="Role" EntitySet="Roles" />
-            <End Role="Artist" EntitySet="Artists" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ArtistPerfomance_Artist" Association="Self.FK_ArtistPerfomance_Artist">
-            <End Role="Artist" EntitySet="Artists" />
-            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomances" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ArtistPerfomance_Perfomance" Association="Self.FK_ArtistPerfomance_Perfomance">
-            <End Role="Perfomance" EntitySet="Perfomances" />
-            <End Role="ArtistPerfomance" EntitySet="ArtistPerfomances" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Ticket_Perfomance" Association="Self.FK_Ticket_Perfomance">
-            <End Role="Perfomance" EntitySet="Perfomances" />
-            <End Role="Ticket" EntitySet="Tickets" />
-          </AssociationSet>
-        </EntityContainer>
+        <Association Name="FK_Ticket_User">
+          <End Type="CircusModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="CircusModel.Ticket" Role="Ticket" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ticket">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -439,72 +576,107 @@
           <EntitySetMapping Name="Animals">
             <EntityTypeMapping TypeName="CircusModel.Animal">
               <MappingFragment StoreEntitySet="Animal">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="AnimalTypeId" ColumnName="AnimalTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AnimalArtists">
             <EntityTypeMapping TypeName="CircusModel.AnimalArtist">
               <MappingFragment StoreEntitySet="AnimalArtist">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="AnimalId" ColumnName="AnimalId" />
                 <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
+                <ScalarProperty Name="AnimalId" ColumnName="AnimalId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AnimalTypes">
             <EntityTypeMapping TypeName="CircusModel.AnimalType">
               <MappingFragment StoreEntitySet="AnimalType">
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Artists">
             <EntityTypeMapping TypeName="CircusModel.Artist">
               <MappingFragment StoreEntitySet="Artist">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ArtistPerfomances">
             <EntityTypeMapping TypeName="CircusModel.ArtistPerfomance">
               <MappingFragment StoreEntitySet="ArtistPerfomance">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
+                <ScalarProperty Name="AnimalArtistId" ColumnName="AnimalArtistId" />
                 <ScalarProperty Name="PerfomanceId" ColumnName="PerfomanceId" />
-                <ScalarProperty Name="AnimalId" ColumnName="AnimalId" />
+                <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cities">
+            <EntityTypeMapping TypeName="CircusModel.City">
+              <MappingFragment StoreEntitySet="City">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Perfomances">
             <EntityTypeMapping TypeName="CircusModel.Perfomance">
               <MappingFragment StoreEntitySet="Perfomance">
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="CircusModel.Role">
               <MappingFragment StoreEntitySet="Role">
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="CircusModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Tickets">
             <EntityTypeMapping TypeName="CircusModel.Ticket">
               <MappingFragment StoreEntitySet="Ticket">
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="PerfomanceId" ColumnName="PerfomanceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CircusModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

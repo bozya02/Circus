@@ -30,8 +30,11 @@ namespace Circus.DB
         public virtual DbSet<AnimalType> AnimalTypes { get; set; }
         public virtual DbSet<Artist> Artists { get; set; }
         public virtual DbSet<ArtistPerfomance> ArtistPerfomances { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Perfomance> Perfomances { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

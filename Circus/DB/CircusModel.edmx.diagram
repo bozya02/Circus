@@ -5,22 +5,27 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="84c5678ce2034a5e888a1ce250d62699" Name="Diagram1">
-        <EntityTypeShape EntityType="CircusModel.Animal" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CircusModel.AnimalArtist" Width="1.5" PointX="4" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CircusModel.AnimalType" Width="1.5" PointX="1.5" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CircusModel.Artist" Width="1.5" PointX="0.75" PointY="12.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CircusModel.ArtistPerfomance" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CircusModel.Perfomance" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CircusModel.Role" Width="1.5" PointX="1.5" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CircusModel.Ticket" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
-        <AssociationConnector Association="CircusModel.FK_Animal_AnimalType" ManuallyRouted="false" />
-        <AssociationConnector Association="CircusModel.FK_AnimalArtist_Animal" ManuallyRouted="false" />
-        <AssociationConnector Association="CircusModel.FK_ArtistPerfomance_Animal" ManuallyRouted="false" />
-        <AssociationConnector Association="CircusModel.FK_AnimalArtist_Artist" ManuallyRouted="false" />
-        <AssociationConnector Association="CircusModel.FK_Artist_Role" ManuallyRouted="false" />
-        <AssociationConnector Association="CircusModel.FK_ArtistPerfomance_Artist" ManuallyRouted="false" />
-        <AssociationConnector Association="CircusModel.FK_ArtistPerfomance_Perfomance" ManuallyRouted="false" />
-        <AssociationConnector Association="CircusModel.FK_Ticket_Perfomance" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CircusModel.Animal" Width="1.5" PointX="0.75" PointY="17.5" />
+        <EntityTypeShape EntityType="CircusModel.AnimalArtist" Width="1.5" PointX="3" PointY="11.625" />
+        <EntityTypeShape EntityType="CircusModel.AnimalType" Width="1.5" PointX="1.5" PointY="20.75" />
+        <EntityTypeShape EntityType="CircusModel.Artist" Width="1.5" PointX="0.75" PointY="10" />
+        <EntityTypeShape EntityType="CircusModel.ArtistPerfomance" Width="1.5" PointX="5.25" PointY="3.5" />
+        <EntityTypeShape EntityType="CircusModel.City" Width="1.5" PointX="0.75" PointY="4" />
+        <EntityTypeShape EntityType="CircusModel.Perfomance" Width="1.5" PointX="3" PointY="3.5" />
+        <EntityTypeShape EntityType="CircusModel.Role" Width="1.5" PointX="1.5" PointY="14.625" />
+        <EntityTypeShape EntityType="CircusModel.sysdiagram" Width="1.5" PointX="5.75" PointY="6.875" />
+        <EntityTypeShape EntityType="CircusModel.Ticket" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="CircusModel.User" Width="1.5" PointX="3" PointY="6.875" />
+        <AssociationConnector Association="CircusModel.FK_Animal_AnimalType" />
+        <AssociationConnector Association="CircusModel.FK_AnimalArtist_Animal" />
+        <AssociationConnector Association="CircusModel.FK_AnimalArtist_Artist" />
+        <AssociationConnector Association="CircusModel.FK_ArtistPerfomance_AnimalArtist" />
+        <AssociationConnector Association="CircusModel.FK_Artist_Role" />
+        <AssociationConnector Association="CircusModel.FK_ArtistPerfomance_Artist" />
+        <AssociationConnector Association="CircusModel.FK_ArtistPerfomance_Perfomance" />
+        <AssociationConnector Association="CircusModel.FK_Perfomance_City" />
+        <AssociationConnector Association="CircusModel.FK_Ticket_Perfomance" />
+        <AssociationConnector Association="CircusModel.FK_Ticket_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

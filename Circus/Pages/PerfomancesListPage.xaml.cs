@@ -48,7 +48,10 @@ namespace Circus.Pages
 
         private void lvPerfomances_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ApplyFiltres();
+            var perfomance = lvPerfomances.SelectedItem as Perfomance;
+
+            if (perfomance != null)
+                NavigationService.Navigate(new PerfomancePage(perfomance));
         }
 
         private void cbSorting_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -91,6 +94,11 @@ namespace Circus.Pages
 
             lvPerfomances.ItemsSource = perfomances;
             lvPerfomances.Items.Refresh();
+        }
+
+        private void btnNewPerfomance_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new PerfomancePage(new Perfomance(), true));
         }
     }
 }

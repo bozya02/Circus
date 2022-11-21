@@ -29,5 +29,10 @@ namespace Circus.Pages
         {
             NavigationService.Navigate(new RegistartionPage());
         }
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new PerfomancesListPage());
+        }
     }
 }

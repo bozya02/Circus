@@ -22,11 +22,16 @@ namespace Circus.Pages
     public partial class ArtistPage : Page
     {
         public Artist Artist { get; set; }
+        public List<Role> Roles { get; set; }
+        public List<Animal> Animals { get; set; }
+
         public ArtistPage(Artist artist, bool isNew = false)
         {
             InitializeComponent();
 
             Artist = artist;
+            Roles = DataAccess.GetRoles();
+            Animals = DataAccess.GetAnimals();
 
             this.DataContext = this;
         }

@@ -12,15 +12,12 @@ namespace Circus.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class ArtistPerfomance
+    public partial class sysdiagram
     {
-        public int Id { get; set; }
-        public int ArtistId { get; set; }
-        public int PerfomanceId { get; set; }
-        public Nullable<int> AnimalArtistId { get; set; }
-    
-        public virtual AnimalArtist AnimalArtist { get; set; }
-        public virtual Artist Artist { get; set; }
-        public virtual Perfomance Perfomance { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

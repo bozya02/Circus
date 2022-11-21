@@ -23,10 +23,13 @@ namespace Circus.DB
     
         public int Id { get; set; }
         public System.DateTime Date { get; set; }
-        public string City { get; set; }
+        public int CityId { get; set; }
+        public byte[] Image { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ArtistPerfomance> ArtistPerfomances { get; set; }
+        public virtual City City { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ticket> Tickets { get; set; }
     }

@@ -19,22 +19,22 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
             <TextBox x:Name="tbSearch" Margin="10" Padding="5"
+                     FontSize="20"
                      materialDesign:HintAssist.Hint="Поиск"
                      TextChanged="tbSearch_TextChanged"/>
 
-            <ComboBox x:Name="cbType" Grid.Column="1"
-                      Margin="10"
+            <ComboBox x:Name="cbType" Grid.Column="1" Margin="10"
                       materialDesign:HintAssist.Hint="Тип"
                       ItemsSource="{Binding AnimalTypes}"
                       SelectedIndex="0"
                       SelectionChanged="cbType_SelectionChanged"/>
 
             <Button x:Name="btnNewAnimal" Content="Добавить"
-                    Grid.Column="2" FontSize="30" MinHeight="60"
+                    Grid.Column="2" FontSize="20" MinHeight="40"
                     Click="btnNewAnimal_Click"/>
         </Grid>
 

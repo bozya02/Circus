@@ -21,8 +21,9 @@
 
         <StackPanel Grid.Row="2" Margin="10" >
             <Button x:Name="btnLogin" Content="Войти"
-                MinWidth="200"
-                FontSize="30" MinHeight="60"/>
+                    MinWidth="200" MinHeight="60"
+                    FontSize="30"
+                    Click="btnLogin_Click"/>
 
             <TextBlock Text="Нет аккаунта? Зарегистрироваться"
                        FontSize="16" Foreground="Orange"

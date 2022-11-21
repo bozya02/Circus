@@ -18,7 +18,6 @@ namespace Circus.DB
         public Animal()
         {
             this.AnimalArtists = new HashSet<AnimalArtist>();
-            this.ArtistPerfomances = new HashSet<ArtistPerfomance>();
         }
     
         public int Id { get; set; }
@@ -28,7 +27,5 @@ namespace Circus.DB
         public virtual AnimalType AnimalType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AnimalArtist> AnimalArtists { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ArtistPerfomance> ArtistPerfomances { get; set; }
     }
 }

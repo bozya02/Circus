@@ -22,7 +22,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="tbSearch" Margin="10" Padding="5"
+            <TextBox x:Name="tbSearch" FontSize="20"
+                     Margin="10" Padding="5"
                      materialDesign:HintAssist.Hint="Поиск"
                      TextChanged="tbSearch_TextChanged"/>
 
@@ -34,7 +35,7 @@
                       SelectionChanged="cbRole_SelectionChanged"/>
 
             <Button x:Name="btnNewArtist" Content="Добавить"
-                    Grid.Column="2" FontSize="30" MinHeight="60"
+                    Grid.Column="2" FontSize="20" MinHeight="40"
                     Click="btnNewArtist_Click"/>
         </Grid>
 

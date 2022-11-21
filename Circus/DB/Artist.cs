@@ -26,6 +26,7 @@ namespace Circus.DB
         public string LastName { get; set; }
         public string Patronymic { get; set; }
         public int RoleId { get; set; }
+        public decimal Salary { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AnimalArtist> AnimalArtists { get; set; }

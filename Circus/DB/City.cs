@@ -12,15 +12,18 @@ namespace Circus.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class ArtistPerfomance
+    public partial class City
     {
-        public int Id { get; set; }
-        public int ArtistId { get; set; }
-        public int PerfomanceId { get; set; }
-        public Nullable<int> AnimalArtistId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public City()
+        {
+            this.Perfomances = new HashSet<Perfomance>();
+        }
     
-        public virtual AnimalArtist AnimalArtist { get; set; }
-        public virtual Artist Artist { get; set; }
-        public virtual Perfomance Perfomance { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Perfomance> Perfomances { get; set; }
     }
 }
