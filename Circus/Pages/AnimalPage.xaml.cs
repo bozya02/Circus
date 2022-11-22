@@ -50,7 +50,7 @@ namespace Circus.Pages
         {
             OpenFileDialog fileDialog = new OpenFileDialog
             {
-                Filter = "*.png|*.png|*.jpg|*.jpg|*.jpeg|*.jpeg"
+                Filter = "*.jpg|*.jpg|*.jpeg|*.jpeg|*.png|*.png"
             };
 
             if (fileDialog.ShowDialog().Value)

@@ -45,28 +45,28 @@
         </Grid>
 
         <ListView x:Name="lvAnimals" ItemsSource="{Binding Animals}"
-                  Grid.Row="1"
+                  Grid.Row="1" FontSize="30"
                   SelectionChanged="lvAnimals_SelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Фото">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding Image}" MaxHeight="100" HorizontalAlignment="Center"/>
+                                <Image Source="{Binding Image}" MaxHeight="100"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Имя">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}" FontSize="30" Margin="0 25"/>
+                                <TextBlock Text="{Binding Name}" Margin="0 25"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Тип">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding AnimalType.Name}" FontSize="30" Margin="0 25"/>
+                                <TextBlock Text="{Binding AnimalType.Name}" Margin="0 25"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
