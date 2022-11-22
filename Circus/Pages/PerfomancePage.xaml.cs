@@ -25,13 +25,18 @@ namespace Circus.Pages
         public List<City> Cities { get; set; }
         public List<Artist> Artists { get; set; }
 
-        public PerfomancePage(Perfomance perfomance, bool isNeww = false)
+        public PerfomancePage(Perfomance perfomance, bool isNew = false)
         {
             InitializeComponent();
 
             Perfomance = perfomance;
             Cities = DataAccess.GetCities();
             Artists = DataAccess.GetArtists();
+
+            if (isNew)
+                Title = $"Новое {Title}";
+            else
+                Title = $"{Title} {Perfomance.Name}";
 
             this.DataContext = this;
         }

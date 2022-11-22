@@ -12,14 +12,16 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="AnimalTypeId" Type="int" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AnimalArtist">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AnimalId" Type="int" />
-          <Property Name="ArtistId" Type="int" />
+          <Property Name="AnimalId" Type="int" Nullable="false" />
+          <Property Name="ArtistId" Type="int" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AnimalType">
           <Key>
@@ -33,11 +35,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nickname" Type="nvarchar" MaxLength="50" />
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
           <Property Name="RoleId" Type="int" Nullable="false" />
-          <Property Name="Salary" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="Salary" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ArtistPerfomance">
           <Key>
@@ -52,7 +56,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Perfomance">
@@ -60,10 +64,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="CityId" Type="int" Nullable="false" />
-          <Property Name="Image" Type="varbinary(max)" />
           <Property Name="Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Image" Type="varbinary(max)" />
+          <Property Name="CityId" Type="int" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="TicketQuantity" Type="int" Nullable="false" />
+          <Property Name="IsSaleReady" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -89,16 +96,18 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PerfomanceId" Type="int" />
           <Property Name="UserId" Type="int" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
           <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Animal_AnimalType">
@@ -114,7 +123,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AnimalArtist_Animal">
-          <End Role="Animal" Type="Self.Animal" Multiplicity="0..1" />
+          <End Role="Animal" Type="Self.Animal" Multiplicity="1" />
           <End Role="AnimalArtist" Type="Self.AnimalArtist" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Animal">
@@ -126,7 +135,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AnimalArtist_Artist">
-          <End Role="Artist" Type="Self.Artist" Multiplicity="0..1" />
+          <End Role="Artist" Type="Self.Artist" Multiplicity="1" />
           <End Role="AnimalArtist" Type="Self.AnimalArtist" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Artist">
@@ -338,6 +347,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AnimalTypeId" Type="Int32" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AnimalType" Relationship="CircusModel.FK_Animal_AnimalType" FromRole="Animal" ToRole="AnimalType" />
           <NavigationProperty Name="AnimalArtists" Relationship="CircusModel.FK_AnimalArtist_Animal" FromRole="Animal" ToRole="AnimalArtist" />
         </EntityType>
@@ -346,8 +356,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AnimalId" Type="Int32" />
-          <Property Name="ArtistId" Type="Int32" />
+          <Property Name="AnimalId" Type="Int32" Nullable="false" />
+          <Property Name="ArtistId" Type="Int32" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Animal" Relationship="CircusModel.FK_AnimalArtist_Animal" FromRole="AnimalArtist" ToRole="Animal" />
           <NavigationProperty Name="Artist" Relationship="CircusModel.FK_AnimalArtist_Artist" FromRole="AnimalArtist" ToRole="Artist" />
           <NavigationProperty Name="ArtistPerfomances" Relationship="CircusModel.FK_ArtistPerfomance_AnimalArtist" FromRole="AnimalArtist" ToRole="ArtistPerfomance" />
@@ -365,11 +376,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RoleId" Type="Int32" Nullable="false" />
-          <Property Name="Salary" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="Salary" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AnimalArtists" Relationship="CircusModel.FK_AnimalArtist_Artist" FromRole="Artist" ToRole="AnimalArtist" />
           <NavigationProperty Name="Role" Relationship="CircusModel.FK_Artist_Role" FromRole="Artist" ToRole="Role" />
           <NavigationProperty Name="ArtistPerfomances" Relationship="CircusModel.FK_ArtistPerfomance_Artist" FromRole="Artist" ToRole="ArtistPerfomance" />
@@ -390,7 +403,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Perfomances" Relationship="CircusModel.FK_Perfomance_City" FromRole="City" ToRole="Perfomance" />
         </EntityType>
@@ -399,13 +412,16 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="CityId" Type="Int32" Nullable="false" />
           <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="CityId" Type="Int32" Nullable="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="TicketQuantity" Type="Int32" Nullable="false" />
+          <Property Name="IsSaleReady" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="ArtistPerfomances" Relationship="CircusModel.FK_ArtistPerfomance_Perfomance" FromRole="Perfomance" ToRole="ArtistPerfomance" />
           <NavigationProperty Name="City" Relationship="CircusModel.FK_Perfomance_City" FromRole="Perfomance" ToRole="City" />
           <NavigationProperty Name="Tickets" Relationship="CircusModel.FK_Ticket_Perfomance" FromRole="Perfomance" ToRole="Ticket" />
-          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -432,6 +448,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PerfomanceId" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Perfomance" Relationship="CircusModel.FK_Ticket_Perfomance" FromRole="Ticket" ToRole="Perfomance" />
           <NavigationProperty Name="User" Relationship="CircusModel.FK_Ticket_User" FromRole="Ticket" ToRole="User" />
         </EntityType>
@@ -439,11 +456,12 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Tickets" Relationship="CircusModel.FK_Ticket_User" FromRole="User" ToRole="Ticket" />
         </EntityType>
@@ -460,7 +478,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AnimalArtist_Animal">
-          <End Type="CircusModel.Animal" Role="Animal" Multiplicity="0..1" />
+          <End Type="CircusModel.Animal" Role="Animal" Multiplicity="1" />
           <End Type="CircusModel.AnimalArtist" Role="AnimalArtist" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Animal">
@@ -472,7 +490,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AnimalArtist_Artist">
-          <End Type="CircusModel.Artist" Role="Artist" Multiplicity="0..1" />
+          <End Type="CircusModel.Artist" Role="Artist" Multiplicity="1" />
           <End Type="CircusModel.AnimalArtist" Role="AnimalArtist" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Artist">
@@ -567,7 +585,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -576,6 +594,7 @@
           <EntitySetMapping Name="Animals">
             <EntityTypeMapping TypeName="CircusModel.Animal">
               <MappingFragment StoreEntitySet="Animal">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="AnimalTypeId" ColumnName="AnimalTypeId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -585,6 +604,7 @@
           <EntitySetMapping Name="AnimalArtists">
             <EntityTypeMapping TypeName="CircusModel.AnimalArtist">
               <MappingFragment StoreEntitySet="AnimalArtist">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
                 <ScalarProperty Name="AnimalId" ColumnName="AnimalId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -602,11 +622,13 @@
           <EntitySetMapping Name="Artists">
             <EntityTypeMapping TypeName="CircusModel.Artist">
               <MappingFragment StoreEntitySet="Artist">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="Salary" ColumnName="Salary" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -632,10 +654,13 @@
           <EntitySetMapping Name="Perfomances">
             <EntityTypeMapping TypeName="CircusModel.Perfomance">
               <MappingFragment StoreEntitySet="Perfomance">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="IsSaleReady" ColumnName="IsSaleReady" />
+                <ScalarProperty Name="TicketQuantity" ColumnName="TicketQuantity" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="CityId" ColumnName="CityId" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -662,6 +687,7 @@
           <EntitySetMapping Name="Tickets">
             <EntityTypeMapping TypeName="CircusModel.Ticket">
               <MappingFragment StoreEntitySet="Ticket">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="PerfomanceId" ColumnName="PerfomanceId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -672,6 +698,7 @@
             <EntityTypeMapping TypeName="CircusModel.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />

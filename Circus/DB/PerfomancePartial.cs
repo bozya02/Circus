@@ -8,6 +8,6 @@ namespace Circus.DB
 {
     public partial class Perfomance
     {
-        public decimal Cost => ArtistPerfomances.Sum(x => x.Artist.Salary);
+        public double Cost => ArtistPerfomances.Sum(x => (double)x.Artist.Salary) * 1.2;
     }
 }

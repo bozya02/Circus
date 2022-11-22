@@ -8,7 +8,9 @@ namespace Circus.DB
 {
     public class DataAccess
     {
-        
+        public delegate void NewItemAdded();
+        public static event NewItemAdded NewItemAddedEvent;
+
         public static List<Perfomance> GetPerfomances() => CircusEntities.GetContext().Perfomances.ToList();
         public static List<City> GetCities() => CircusEntities.GetContext().Cities.ToList();
         public static List<Animal> GetAnimals() => CircusEntities.GetContext().Animals.ToList();
@@ -31,6 +33,7 @@ namespace Circus.DB
                 CircusEntities.GetContext().Users.Add(user);
 
             CircusEntities.GetContext().SaveChanges();
+            NewItemAddedEvent?.Invoke();
         }
 
         public static void SavePerfomance(Perfomance perfomance)
@@ -39,11 +42,19 @@ namespace Circus.DB
                 CircusEntities.GetContext().Perfomances.Add(perfomance);
 
             CircusEntities.GetContext().SaveChanges();
+            NewItemAddedEvent?.Invoke();
+        }
+
+        public static bool CanDeletePerfomance(Perfomance perfomance)
+        {
+            return perfomance.Date > DateTime.Now && perfomance.Tickets.Count == 0;
         }
 
         public static void DeletePerfomance(Perfomance perfomance)
         {
-            
+            perfomance.IsDeleted = true;
+
+            SavePerfomance(perfomance);
         }
 
         public static void SaveAnimal(Animal animal)
@@ -52,11 +63,39 @@ namespace Circus.DB
                 CircusEntities.GetContext().Animals.Add(animal);
 
             CircusEntities.GetContext().SaveChanges();
+            NewItemAddedEvent?.Invoke();
+        }
+
+        public static bool CanDeleteAnimal(Animal animal)
+        {
+            var canDelete = false;
+            foreach (var animalArtist in animal.AnimalArtists)
+            {
+                foreach (var artistPerfomance in animalArtist.ArtistPerfomances)
+                {
+                    if (CanDeletePerfomance(artistPerfomance.Perfomance))
+                    {
+                        canDelete = true;
+                        break;
+                    }    
+                }
+                if (canDelete)
+                    break;
+            }
+
+            return canDelete;
         }
 
         public static void DeleteAnimal(Animal animal)
         {
+            animal.IsDeleted = true;
 
+            foreach (var animalArtist in animal.AnimalArtists)
+            {
+                animalArtist.IsDeleted = true;
+            }
+
+            SaveAnimal(animal);
         }
 
         public static void SaveArtist(Artist artist)
@@ -65,11 +104,48 @@ namespace Circus.DB
                 CircusEntities.GetContext().Artists.Add(artist);
 
             CircusEntities.GetContext().SaveChanges();
+            NewItemAddedEvent?.Invoke();
+        }
+
+        public static bool CanDeleteArtist(Artist artist)
+        {
+            var canDelete = false;
+
+            foreach (var artistPerfomance in artist.ArtistPerfomances)
+            {
+                if (CanDeletePerfomance(artistPerfomance.Perfomance))
+                {
+                    canDelete = true;
+                    break;
+                }
+            }
+
+            return canDelete;
         }
 
         public static void DeleteArtist(Artist artist)
         {
+            artist.IsDeleted = true;
 
+            foreach (var animalArtist in artist.AnimalArtists)
+            {
+                animalArtist.IsDeleted = true;
+            }
+
+            SaveArtist(artist);
+        }
+
+        public static void DeleteArtistPerfomance(ArtistPerfomance artistPerfomance)
+        {
+            CircusEntities.GetContext().ArtistPerfomances.Remove(artistPerfomance);
+            CircusEntities.GetContext().SaveChanges();
+        }
+
+        public static void DeleteTicket(Ticket ticket)
+        {
+            CircusEntities.GetContext().Tickets.Remove(ticket);
+            CircusEntities.GetContext().SaveChanges();
+            NewItemAddedEvent?.Invoke();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Circus.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,14 +26,22 @@ namespace Circus.Pages
             InitializeComponent();
         }
 
-        private void tbNoAccount_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new RegistartionPage());
-        }
-
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            var login = tbLogin.Text;
+            var password = pbPassword.Password;
+            if ((App.User = DataAccess.LoginUser(login, password)) == null)
+            {
+                MessageBox.Show("Неверный логин и/или пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             NavigationService.Navigate(new PerfomancesListPage());
+        }
+
+        private void tbNoAccount_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            NavigationService.Navigate(new RegistartionPage());
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Circus.DB
         public int Id { get; set; }
         public Nullable<int> PerfomanceId { get; set; }
         public Nullable<int> UserId { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual Perfomance Perfomance { get; set; }
         public virtual User User { get; set; }

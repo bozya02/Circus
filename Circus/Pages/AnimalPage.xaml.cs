@@ -22,12 +22,19 @@ namespace Circus.Pages
     public partial class AnimalPage : Page
     {
         public Animal Animal { get; set; }
+        public List<AnimalType> AnimalTypes { get; set; }
 
         public AnimalPage(Animal animal, bool isNew = false)
         {
             InitializeComponent();
             
             Animal = animal;
+            AnimalTypes = DataAccess.GetAnimalTypes();
+
+            if (isNew)
+                Title = $"Новое {Title}";
+            else
+                Title = $"{Title} {Animal.Name}";
 
             this.DataContext = this;
         }

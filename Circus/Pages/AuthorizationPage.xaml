@@ -15,9 +15,9 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="tbLogin" materialDesign:HintAssist.Hint="Пароль"/>
+        <TextBox x:Name="tbLogin" materialDesign:HintAssist.Hint="Логин"/>
         <PasswordBox x:Name="pbPassword" Grid.Row="1"
-                     materialDesign:HintAssist.Hint="Логин"/>
+                     materialDesign:HintAssist.Hint="Пароль"/>
 
         <StackPanel Grid.Row="2" Margin="10" >
             <Button x:Name="btnLogin" Content="Войти"
@@ -25,11 +25,11 @@
                     FontSize="30"
                     Click="btnLogin_Click"/>
 
-            <TextBlock Text="Нет аккаунта? Зарегистрироваться"
+            <TextBlock x:Name="tbNoAccount"
+                       Text="Нет аккаунта? Зарегистрироваться"
                        FontSize="16" Foreground="Orange"
                        HorizontalAlignment="Center"
-                       Hyperlink.Click="tbNoAccount_Click">
-            </TextBlock>
+                       PreviewMouseDown="tbNoAccount_PreviewMouseDown"/>
         </StackPanel>
     </Grid>
 </Page>

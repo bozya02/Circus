@@ -30,6 +30,7 @@ namespace Circus.Pages
             InitializeComponent();
 
             Perfomances = DataAccess.GetPerfomances();
+            Cities = DataAccess.GetCities();
             Sortings = new Dictionary<string, Func<Perfomance, object>>
             {
                 { "Без сортировки", x => x.Id },
@@ -43,7 +44,17 @@ namespace Circus.Pages
                 { "Дата проведения по убыванию", x => x.Date },     //reserse
             };
 
+
+            DataAccess.NewItemAddedEvent += DataAccess_NewItemAddedEvent;
+
             this.DataContext = this;
+        }
+
+        private void DataAccess_NewItemAddedEvent()
+        {
+            Perfomances = DataAccess.GetPerfomances();
+            lvPerfomances.ItemsSource = Perfomances;
+            lvPerfomances.Items.Refresh();
         }
 
         private void lvPerfomances_SelectionChanged(object sender, SelectionChangedEventArgs e)

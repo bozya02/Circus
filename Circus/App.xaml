@@ -13,11 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <SolidColorBrush x:Key="BackgroundColor">
-                #DBE2E9
-            </SolidColorBrush>
-
-            <SolidColorBrush x:Key="HintBackgroundColor">
-                #FFFFFF
+                #fafafa
             </SolidColorBrush>
 
 

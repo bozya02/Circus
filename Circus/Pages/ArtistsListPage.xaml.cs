@@ -31,7 +31,16 @@ namespace Circus.Pages
             Artists = DataAccess.GetArtists();
             Roles = DataAccess.GetRoles();
 
+            DataAccess.NewItemAddedEvent += DataAccess_NewItemAddedEvent;
+
             this.DataContext = this;
+        }
+
+        private void DataAccess_NewItemAddedEvent()
+        {
+            Artists = DataAccess.GetArtists();
+            lvArtists.ItemsSource = Artists;
+            lvArtists.Items.Refresh();
         }
 
         private void tbSearch_TextChanged(object sender, TextChangedEventArgs e)

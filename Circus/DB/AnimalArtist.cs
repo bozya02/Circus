@@ -21,8 +21,9 @@ namespace Circus.DB
         }
     
         public int Id { get; set; }
-        public Nullable<int> AnimalId { get; set; }
-        public Nullable<int> ArtistId { get; set; }
+        public int AnimalId { get; set; }
+        public int ArtistId { get; set; }
+        public bool IsDeleted { get; set; }
     
         public virtual Animal Animal { get; set; }
         public virtual Artist Artist { get; set; }

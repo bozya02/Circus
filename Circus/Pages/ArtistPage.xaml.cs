@@ -33,6 +33,11 @@ namespace Circus.Pages
             Roles = DataAccess.GetRoles();
             Animals = DataAccess.GetAnimals();
 
+            if (isNew)
+                Title = $"Новый {Title}";
+            else
+                Title = $"{Title} {Artist.Patronymic}";
+
             this.DataContext = this;
         }
     }

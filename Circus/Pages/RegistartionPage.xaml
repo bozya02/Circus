@@ -3,12 +3,44 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:Circus.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Регистрация">
 
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel VerticalAlignment="Center">
+            <TextBox x:Name="tbFirstName" Margin="10 20"
+                     materialDesign:HintAssist.Hint="Фамилия"/>
+            <TextBox x:Name="tbLastName" Margin="10 20"
+                     materialDesign:HintAssist.Hint="Имя"/>
+            <TextBox x:Name="tbPatronymic" Margin="10 20"
+                     materialDesign:HintAssist.Hint="Отчество"/>
+        </StackPanel>
+
+        <StackPanel VerticalAlignment="Center" Grid.Column="1">
+            <TextBox x:Name="tbLogin" Margin="10 20"
+                     materialDesign:HintAssist.Hint="Логин"/>
+            <PasswordBox x:Name="pbPassword" Margin="10 20"
+                     materialDesign:HintAssist.Hint="Пароль"/>
+            <PasswordBox x:Name="pbSecondPassword" Margin="10 20"
+                     materialDesign:HintAssist.Hint="Повторите пароль"/>
+        </StackPanel>
+
+        <Button x:Name="btnRegistration"
+                Content="Зарегистрироваться" FontSize="30"
+                MinWidth="200" MinHeight="60"
+                Grid.ColumnSpan="2" Grid.Row="5"
+                Click="btnRegistration_Click"/>
     </Grid>
 </Page>

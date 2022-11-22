@@ -36,15 +36,17 @@ namespace Circus
 
             if (content is AuthorizationPage)
             {
-                btnBack.Visibility = Visibility.Collapsed;
+                btnBack.Visibility = Visibility.Hidden;
                 btnForward.Visibility = Visibility.Collapsed;
-                spNavigation.Visibility = Visibility.Collapsed;
+                btnExit.Visibility = Visibility.Collapsed;
+                spNavigation.Visibility = Visibility.Hidden;
             }
             else if (content is RegistartionPage)
             {
                 btnBack.Visibility = Visibility.Visible;
                 btnForward.Visibility = Visibility.Collapsed;
-                spNavigation.Visibility = Visibility.Collapsed;
+                btnExit.Visibility = Visibility.Collapsed;
+                spNavigation.Visibility = Visibility.Hidden;
             }
             else
             {
@@ -52,7 +54,6 @@ namespace Circus
                 btnForward.Visibility = Visibility.Visible;
                 spNavigation.Visibility = Visibility.Visible;
             }
-
 
             tbTitle.Text = content.Title;
         }
@@ -77,13 +78,16 @@ namespace Circus
         private void btnAnimals_Click(object sender, RoutedEventArgs e)
         {
             frame.NavigationService.Navigate(new AnimalsListPage());
-
         }
 
         private void btnArtists_Click(object sender, RoutedEventArgs e)
         {
             frame.NavigationService.Navigate(new ArtistsListPage());
+        }
 
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            frame.NavigationService.Navigate(new AuthorizationPage());
         }
     }
 }

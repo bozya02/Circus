@@ -31,7 +31,16 @@ namespace Circus.Pages
             Animals = DataAccess.GetAnimals();
             AnimalTypes = DataAccess.GetAnimalTypes();
 
+            DataAccess.NewItemAddedEvent += DataAccess_NewItemAddedEvent;
+
             this.DataContext = this;
+        }
+
+        private void DataAccess_NewItemAddedEvent()
+        {
+            Animals = DataAccess.GetAnimals();
+            lvAnimals.ItemsSource = Animals;
+            lvAnimals.Items.Refresh();
         }
 
         private void lvAnimals_SelectionChanged(object sender, SelectionChangedEventArgs e)
