@@ -30,7 +30,6 @@ namespace Circus.Pages
             InitializeComponent();
 
             Perfomances = DataAccess.GetPerfomances();
-            Cities = DataAccess.GetCities();
             Sortings = new Dictionary<string, Func<Perfomance, object>>
             {
                 { "Без сортировки", x => x.Id },
@@ -44,6 +43,11 @@ namespace Circus.Pages
                 { "Дата проведения по убыванию", x => x.Date },     //reserse
             };
 
+            Cities = DataAccess.GetCities();
+            Cities.Insert(0, new City { Name = "Все города" });
+
+            if (!App.User.IsAdmin)
+                btnNewPerfomance.Visibility = Visibility.Collapsed;
 
             DataAccess.NewItemAddedEvent += DataAccess_NewItemAddedEvent;
 
@@ -88,15 +92,20 @@ namespace Circus.Pages
         private void ApplyFiltres()
         {
             var perfomanceName = tbSearch.Text.ToLower();
-            var isActual = checkActual.IsChecked;
+            var isActual = (bool)checkActual.IsChecked;
             var sorting = Sortings[cbSorting.SelectedItem as string];
             var city = cbCity.SelectedItem as City;
 
             if (sorting == null || city == null)
                 return;
 
-            var perfomances = Perfomances.FindAll(x => x.Name.ToLower().Contains(perfomanceName) &&
-                                                       x.Date > DateTime.Now && x.City == city);
+            var perfomances = Perfomances.FindAll(x => x.Name.ToLower().Contains(perfomanceName));
+
+            if (city.Name != "Все города")
+                perfomances = Perfomances.FindAll(x => x.City == city);
+
+            if (isActual)
+                perfomances = Perfomances.FindAll(x => x.Date > DateTime.Now);
 
             perfomances = (cbSorting.SelectedItem as string).ToLower().Contains("убыванию") ? 
                           perfomances.OrderBy(sorting).ToList() :

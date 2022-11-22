@@ -33,6 +33,7 @@
                 <Button x:Name="btnPerfomances" Content="Выступления" Margin="5" Click="btnPerfomances_Click"/>
                 <Button x:Name="btnAnimals" Content="Животные" Margin="5" Click="btnAnimals_Click"/>
                 <Button x:Name="btnArtists" Content="Артисты" Margin="5" Click="btnArtists_Click"/>
+                <Button x:Name="btnTickets" Content="Билеты" Margin="5" Click="btnTickets_Click"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right">
                 <Button x:Name="btnExit" Margin="5" Click="btnExit_Click" Padding="0" Width="40">

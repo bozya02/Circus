@@ -68,7 +68,7 @@ namespace Circus.Pages
             StringBuilder sb = new StringBuilder();
 
             if (string.IsNullOrWhiteSpace(Animal.Name))
-                sb.AppendLine("Имя живтоного не может быть пустым!");
+                sb.AppendLine("Имя животного не может быть пустым!");
             if (Animal.AnimalType == null)
                 sb.AppendLine("Нужно выбрать тип животного!");
 

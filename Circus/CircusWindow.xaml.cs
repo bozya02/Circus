@@ -89,5 +89,10 @@ namespace Circus
         {
             frame.NavigationService.Navigate(new AuthorizationPage());
         }
+
+        private void btnTickets_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -3,12 +3,116 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:Circus.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Артист">
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="MaxWidth" Value="400"/>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
 
-    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="tbNickname" Text="{Binding Artist.Nickname}" Padding="10"
+                 materialDesign:HintAssist.Hint="Сценическое имя"/>
+        <TextBox x:Name="tbLastName" Text="{Binding Artist.LastName}"
+                 Grid.Row="1" Padding="10"
+                 materialDesign:HintAssist.Hint="Фамилия"/>
+        <TextBox x:Name="tbFirstName" Text="{Binding Artist.FirstName}"
+                 Grid.Row="2" Padding="10"
+                 materialDesign:HintAssist.Hint="Имя"/>
+        <TextBox x:Name="tbPatronymic" Text="{Binding Artist.Patronymic}"
+                 Grid.Row="3" Padding="10"
+                 materialDesign:HintAssist.Hint="Отчество"/>
+        <TextBox x:Name="tbSalary" Text="{Binding Artist.Salary}"
+                 Grid.Row="4" Padding="10"
+                 materialDesign:HintAssist.Hint="Оклад"/>
+
+        <ComboBox x:Name="cbRole" Grid.Column="1" FontSize="24"
+                  Margin="10" Padding="10"
+                  ItemsSource="{Binding Roles}"
+                  SelectedItem="{Binding Artist.Role}"
+                  materialDesign:HintAssist.Hint="Роль">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <Image x:Name="imgArtist" Source="{Binding Artist.Image}"
+               Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"/>
+
+        <Button x:Name="btnSelectImage" Content="Выбрать фото"
+                Grid.Column="1" Grid.Row="4"
+                Click="btnSelectImage_Click"/>
+
+        <ComboBox x:Name="cbAnimal" Grid.Column="2" FontSize="24"
+                  Margin="10" Padding="10"
+                  ItemsSource="{Binding Animals}"
+                  materialDesign:HintAssist.Hint="Животное"
+                  SelectionChanged="cbAnimal_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="{Binding Name}"/>
+                        <Run Text="{Binding AnimalType.Name}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <ListView x:Name="lvAnimalArtists"
+                  Grid.Row="1" Grid.Column="2" Grid.RowSpan="4"
+                  ItemsSource="{Binding Artist.NotDeletedAnimalArtists}"
+                  SelectionChanged="lvAnimalArtists_SelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        
+                        <Image Source="{Binding Animal.Image}" MaxHeight="70"/>
+                        <TextBlock Margin="10 20">
+                            <Run Text="{Binding Animal.Name}"/>
+                            <Run Text="-"/>
+                            <Run Text="{Binding Animal.AnimalType.Name}"/>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         
+        <Button x:Name="btnSave" Content="Сохранить"
+                MinWidth="200" MinHeight="40"
+                Grid.ColumnSpan="2"
+                FontSize="20" Grid.Row="5"
+                Click="btnSave_Click"/>
+
+        <Button x:Name="btnDelete" Content="Удалить"
+                MinWidth="200" MinHeight="40"
+                FontSize="20" Style="{StaticResource btnSecondary}"
+                Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"
+                Click="btnDelete_Click"/>
     </Grid>
 </Page>

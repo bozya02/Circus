@@ -31,6 +31,14 @@ namespace Circus.Pages
             Artists = DataAccess.GetArtists();
             Roles = DataAccess.GetRoles();
 
+            Roles.Insert(0, new Role
+            {
+                Name = "Все роли"
+            });
+
+            if (!App.User.IsAdmin)
+                btnNewArtist.Visibility= Visibility.Collapsed;
+
             DataAccess.NewItemAddedEvent += DataAccess_NewItemAddedEvent;
 
             this.DataContext = this;
@@ -61,9 +69,12 @@ namespace Circus.Pages
             if (role == null)
                 return;
 
-            var artists = Artists.FindAll(x => (x.LastName.ToLower().Contains(name) ||
-                                                x.FirstName.ToLower().Contains(name)) &&
-                                                x.Role == role);
+            var artists = Artists.FindAll(x => x.LastName.ToLower().Contains(name) ||
+                                               x.FirstName.ToLower().Contains(name) ||
+                                               x.Nickname.ToLower().Contains(name));
+
+            if (role.Name != "Все роли")
+                artists = Artists.FindAll(x => x.Role == role);
 
             lvArtists.ItemsSource = artists;
             lvArtists.Items.Refresh();
