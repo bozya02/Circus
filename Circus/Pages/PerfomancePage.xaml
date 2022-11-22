@@ -3,12 +3,154 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:Circus.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Выступление">
-
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="MaxWidth" Value="400"/>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="tbName" Text="{Binding Perfomance.Name}"
+                 Grid.Row="0" Padding="10"
+                 materialDesign:HintAssist.Hint="Название"/>
+
+        <DatePicker x:Name="dpDate" Grid.Row="1"
+                    Margin="10" Padding="10" FontSize="24" 
+                    materialDesign:HintAssist.Hint="Дата проведения"
+                    Language="ru-RU"
+                    SelectedDate="{Binding Perfomance.Date, ConverterCulture=ru}"/>
+
+        <materialDesign:TimePicker x:Name="tpStartTime" Grid.Row="2"
+                                   Margin="10" Padding="10"
+                                   Is24Hours="True"
+                                   materialDesign:HintAssist.Hint="Время начала"
+                                   SelectedTimeChanged="tpStartTime_SelectedTimeChanged"
+                                   SelectedTime="{Binding Perfomance.StartTime}"/>
+
+        <materialDesign:TimePicker x:Name="tpEndTime" Grid.Row="3"
+                                   Margin="10" Padding="10"
+                                   Is24Hours="True"
+                                   materialDesign:HintAssist.Hint="Время окончания"
+                                   SelectedTimeChanged="tpEndTime_SelectedTimeChanged"
+                                   SelectedTime="{Binding Perfomance.EndTime}"/>
+
+        <ComboBox x:Name="cbCity" Grid.Row="4"
+                  Margin="10" Padding="10" FontSize="24"
+                  materialDesign:HintAssist.Hint="Город"
+                  ItemsSource="{Binding Cities}"
+                  SelectedItem="{Binding Perfomance.City}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+
+        <Image x:Name="ingPerfomance" Source="{Binding Perfomance.Image}"
+               Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Margin="10"/>
+
+        <Button x:Name="btnSelectImage" Content="Выбрать фото"
+                Grid.Column="1" Grid.Row="4"
+                Click="btnSelectImage_Click"/>
+
+        <CheckBox x:Name="checkSaleReady" Content="Начать продажи"
+                  Grid.Column="1"
+                  IsChecked="{Binding Perfomance.IsSaleReady}"/>
+
+        <ComboBox x:Name="cbArtist" Grid.Column="2"
+                  Margin="10" Padding="10" FontSize="24"
+                  materialDesign:HintAssist.Hint="Артист"
+                  ItemsSource="{Binding Artists}"
+                  SelectionChanged="cbArtist_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="{Binding Nickname}"/>
+                        <Run Text="-"/>
+                        <Run Text="{Binding Role.Name}"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <ListView x:Name="lvArtistPerfomance"
+                  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2"
+                  ItemsSource="{Binding Perfomance.ArtistPerfomances}"
+                  SelectionChanged="lvArtistPerfomance_SelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Artist.Image}" MaxHeight="70"/>
+                        <TextBlock Text="{Binding Artist.Nickname}" Margin="10 20"/>
+                        <ComboBox ItemsSource="{Binding Artist.NotDeletedAnimalArtists}" FontSize="16" Margin="10 20">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <Run Text="{Binding Animal.Name}"/>
+                                        <Run Text="{Binding Animal.AnimalType.Name}"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <TextBox x:Name="tbTicketQuantity" Text="{Binding TicketQuantity}"
+                 Grid.Row="3" Grid.Column="2" Padding="10"
+                 materialDesign:HintAssist.Hint="Количество билетов"/>
         
+        <TextBox x:Name="tbTicketRemainder" Text="{Binding TicketRemainder}"
+                 Grid.Row="3" Grid.Column="2" Padding="10"
+                 Visibility="Hidden" IsEnabled="False"
+                 materialDesign:HintAssist.Hint="Осталось билетов"/>
+
+        <TextBox x:Name="tbTickerPrice" Text="{Binding TicketPrice}"
+                 Grid.Row="4" Grid.Column="2"
+                 Padding="10" FontSize="20" IsEnabled="False"
+                 materialDesign:HintAssist.Hint="Цена билета"/>
+
+        <Button x:Name="btnSave" Content="Сохранить"
+                MinWidth="200" MinHeight="40"
+                FontSize="20" Grid.Row="5"
+                Click="btnSave_Click"/>
+
+        <Button x:Name="btnDelete" Content="Удалить"
+                MinWidth="200" MinHeight="40"
+                FontSize="20" Style="{StaticResource btnSecondary}"
+                Grid.Row="5" Grid.Column="1"
+                Click="btnDelete_Click"/>
+
+        <Button x:Name="btnBuyTicket" Content="Купить билет"
+                MinWidth="200" MinHeight="40" FontSize="20"
+                Grid.Row="5" Grid.Column="2" Visibility="Hidden"
+                Click="btnBuyTicket_Click"/>
     </Grid>
 </Page>

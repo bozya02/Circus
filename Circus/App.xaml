@@ -59,6 +59,12 @@
                 <Setter Property="Padding" Value="10"/>
             </Style>
 
+            <Style TargetType="materialDesign:TimePicker" BasedOn="{StaticResource MaterialDesignOutlinedTimePicker}">
+                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="Padding" Value="10"/>
+            </Style>
+
             <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignChoiceChipPrimaryOutlineRadioButton}">
                 <Setter Property="FontSize" Value="24"/>
             </Style>

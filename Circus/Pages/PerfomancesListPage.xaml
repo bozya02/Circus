@@ -80,10 +80,17 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Дата и время">
+                    <GridViewColumn Header="Дата">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Date, ConverterCulture=ru}" FontSize="30" Margin="0 25"/>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Date, StringFormat=d, ConverterCulture=ru}" FontSize="30" Margin="0 25"/>
+                                    <TextBlock FontSize="30" Margin="0 25">
+                                        <Run Text="{Binding StartTime, StringFormat=T, ConverterCulture=ru}"/>
+                                        <Run Text="-"/>
+                                        <Run Text="{Binding EndTime, StringFormat=T, ConverterCulture=ru}"/>
+                                    </TextBlock>
+                                </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

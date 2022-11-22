@@ -169,9 +169,6 @@
     <Compile Include="DB\Role.cs">
       <DependentUpon>CircusModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DB\sysdiagram.cs">
-      <DependentUpon>CircusModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DB\Ticket.cs">
       <DependentUpon>CircusModel.tt</DependentUpon>
     </Compile>

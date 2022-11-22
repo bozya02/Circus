@@ -1,6 +1,8 @@
 ﻿using Circus.DB;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,11 +36,176 @@ namespace Circus.Pages
             Artists = DataAccess.GetArtists();
 
             if (isNew)
+            {
                 Title = $"Новое {Title}";
+                btnDelete.Visibility = Visibility.Collapsed;
+                checkSaleReady.Visibility = Visibility.Hidden;
+                Perfomance.Date = DateTime.Now;
+            }
             else
+            {
                 Title = $"{Title} {Perfomance.Name}";
+                checkSaleReady.Visibility = Visibility.Hidden;
+            }
+
+            dpDate.DisplayDateStart = DateTime.Now;
+
+            ChangeEnable();
 
             this.DataContext = this;
+        }
+
+        private void ChangeEnable()
+        {
+            var enable = !Perfomance.IsSaleReady && App.User.IsAdmin;
+
+            tbName.IsEnabled = enable;
+            dpDate.IsEnabled = enable;
+            tpStartTime.IsEnabled = enable;
+            tpEndTime.IsEnabled = enable;
+            cbCity.IsEnabled = enable;
+            btnSelectImage.IsEnabled = enable;
+            checkSaleReady.IsEnabled = enable;
+            tbTicketQuantity.IsEnabled = enable;
+            cbArtist.IsEnabled = enable;
+            
+            if (Perfomance.IsSaleReady)
+            {
+                tbTicketQuantity.Visibility = Visibility.Hidden;
+                tbTicketRemainder.Visibility = Visibility.Visible;
+                btnBuyTicket.Visibility = Visibility.Visible;
+            }    
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (string.IsNullOrWhiteSpace(Perfomance.Name))
+                sb.AppendLine("Название не может быть пустым!");
+            if (Perfomance.StartTime < DateTime.Now.TimeOfDay && Perfomance.Date.Date == DateTime.Today.Date)
+                sb.AppendLine("Некорректное время начала!");
+            if (Perfomance.EndTime < Perfomance.StartTime)
+                sb.AppendLine("Некорректное время окончания!");
+            if (Perfomance.EndTime - Perfomance.StartTime < TimeSpan.FromHours(1))
+                sb.AppendLine("Продолжительность выступления должна быть минимум 1 час!");
+            if (Perfomance.ArtistPerfomances.Count == 0)
+                sb.AppendLine("Добавьте минимум одного артиста!");
+
+            if (sb.Length != 0)
+            {
+                MessageBox.Show(sb.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            DataAccess.SavePerfomance(Perfomance);
+            NavigationService.GoBack();
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataAccess.CanDeletePerfomance(Perfomance))
+            {
+                MessageBox.Show("Нельзя удалить это выступление!\nУ него есть проданные билеты.", "Ошибка", MessageBoxButton.OKCancel, MessageBoxImage.Error);
+                return;
+            }
+            if (MessageBox.Show("Вы точно хотите удалить это выступление?", "Предупреждение",
+                                MessageBoxButton.YesNoCancel, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                DataAccess.DeletePerfomance(Perfomance);
+                NavigationService.GoBack();
+            }
+            catch
+            {
+                MessageBox.Show("Непредвиденная ошибка", "Ошибка");
+            }
+        }
+
+        private void btnSelectImage_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog
+            {
+                Filter = "*.jpg|*.jpg|*.jpeg|*.jpeg|*.png|*.png"
+            };
+
+            if (fileDialog.ShowDialog().Value)
+            {
+                var image = File.ReadAllBytes(fileDialog.FileName);
+
+                Perfomance.Image = image;
+
+                ingPerfomance.Source = new BitmapImage(new Uri(fileDialog.FileName));
+            }
+        }
+
+        private void btnBuyTicket_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show($"Вы точно хотите убрать купить билет?", "Предупреждение",
+                                         MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            Ticket ticket = new Ticket
+            {
+                Perfomance = Perfomance,
+                User = App.User
+            };
+
+            Perfomance.Tickets.Add(ticket);
+            DataAccess.SavePerfomance(Perfomance);
+        }
+
+        private void cbArtist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var artist = cbArtist.SelectedItem as Artist;
+
+            if (artist == null)
+                return;
+
+            Perfomance.ArtistPerfomances.Add(new ArtistPerfomance
+            {
+                Artist = artist
+            });
+
+            lvArtistPerfomance.ItemsSource = Perfomance.ArtistPerfomances;
+            lvArtistPerfomance.Items.Refresh();
+        }
+
+        private void lvArtistPerfomance_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Perfomance.IsSaleReady || !App.User.IsAdmin)
+                return;
+
+            var artistPerfomance = lvArtistPerfomance.SelectedItem as ArtistPerfomance;
+
+            if (artistPerfomance == null)
+                return;
+
+            var result = MessageBox.Show($"Вы точно хотите убрать {artistPerfomance.Artist.Nickname} из выступдения?", "Предупреждение",
+                                         MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            Perfomance.ArtistPerfomances.Remove(artistPerfomance);
+            DataAccess.DeleteArtistPerfomance(artistPerfomance);
+
+            lvArtistPerfomance.ItemsSource = Perfomance.ArtistPerfomances;
+            lvArtistPerfomance.Items.Refresh();
+        }
+
+        private void tpStartTime_SelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
+        {
+            Perfomance.StartTime = tpStartTime.SelectedTime.Value.TimeOfDay;
+        }
+
+        private void tpEndTime_SelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
+        {
+            Perfomance.EndTime = tpEndTime.SelectedTime.Value.TimeOfDay;
         }
     }
 }

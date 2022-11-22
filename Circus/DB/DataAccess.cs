@@ -17,6 +17,7 @@ namespace Circus.DB
         public static List<AnimalType> GetAnimalTypes() => CircusEntities.GetContext().AnimalTypes.ToList();
         public static List<Artist> GetArtists() => CircusEntities.GetContext().Artists.ToList().FindAll(x => !x.IsDeleted);
         public static List<Role> GetRoles() => CircusEntities.GetContext().Roles.ToList();
+        public static List<Ticket> GetTickets() => CircusEntities.GetContext().Tickets.ToList();
         public static List<User> GetUsers() => CircusEntities.GetContext().Users.ToList();
 
 
@@ -47,7 +48,8 @@ namespace Circus.DB
 
         public static bool CanDeletePerfomance(Perfomance perfomance)
         {
-            return perfomance.Date > DateTime.Now && perfomance.Tickets.Count == 0;
+            return perfomance.Date + perfomance.StartTime > DateTime.Now &&
+                   perfomance.Tickets.Count == 0 && !perfomance.IsSaleReady;
         }
 
         public static void DeletePerfomance(Perfomance perfomance)

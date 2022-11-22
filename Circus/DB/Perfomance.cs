@@ -29,6 +29,8 @@ namespace Circus.DB
         public bool IsDeleted { get; set; }
         public int TicketQuantity { get; set; }
         public bool IsSaleReady { get; set; }
+        public System.TimeSpan StartTime { get; set; }
+        public System.TimeSpan EndTime { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ArtistPerfomance> ArtistPerfomances { get; set; }
