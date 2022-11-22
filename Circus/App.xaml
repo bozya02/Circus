@@ -24,6 +24,13 @@
                 <Setter Property="FontSize" Value="16"/>
             </Style>
 
+            <Style x:Key="btnSecondary" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedSecondaryButton}">
+                <Setter Property="Margin" Value="2, 5"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="MaxWidth" Value="400"/>
+                <Setter Property="FontSize" Value="16"/>
+            </Style>
+
             <Style TargetType="PasswordBox" BasedOn="{StaticResource MaterialDesignOutlinedPasswordBox}">
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -41,6 +48,7 @@
             <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
                 <Setter Property="Padding" Value="5"/>
                 <Setter Property="FontSize" Value="20"/>
+                <Setter Property="MaxWidth" Value="400"/>
             </Style>
 
             <Style TargetType="ListView" BasedOn="{StaticResource MaterialDesignListView}">

@@ -23,6 +23,7 @@ namespace Circus.DB
         public int Id { get; set; }
         public string Name { get; set; }
         public int AnimalTypeId { get; set; }
+        public byte[] Image { get; set; }
         public bool IsDeleted { get; set; }
     
         public virtual AnimalType AnimalType { get; set; }

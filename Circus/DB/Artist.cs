@@ -26,8 +26,9 @@ namespace Circus.DB
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Patronymic { get; set; }
-        public int RoleId { get; set; }
+        public byte[] Image { get; set; }
         public decimal Salary { get; set; }
+        public int RoleId { get; set; }
         public bool IsDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

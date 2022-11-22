@@ -3,12 +3,56 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:Circus.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Животное">
 
-    <Grid>
-        
+    <Grid x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel VerticalAlignment="Center">
+            <TextBox x:Name="tbName" Text="{Binding Animal.Name}"
+                     Margin="10 30"
+                     materialDesign:HintAssist.Hint="Имя"/>
+
+            <ComboBox x:Name="cbAnimalType" FontSize="30"
+                      Margin="10 30" Padding="15"
+                      materialDesign:HintAssist.Hint="Тип"
+                      ItemsSource="{Binding AnimalTypes}"
+                      SelectedItem="{Binding Animal.AnimalType}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+            <Image x:Name="imgAnimal" Source="{Binding Animal.Image}"
+                   Margin="15" Height="350"/>
+            <Button x:Name="btnSelectImage" Content="Выбрать фото" Click="btnSelectImage_Click"/>
+        </StackPanel>
+
+        <Button x:Name="btnSave" Content="Сохранить"
+                MinWidth="200" MinHeight="40"
+                FontSize="20" Grid.Row="1"
+                Click="btnSave_Click"/>
+
+        <Button x:Name="btnDelete" Content="Удалить"
+                MinWidth="200" MinHeight="40"
+                FontSize="20" Style="{StaticResource btnSecondary}"
+                Grid.Row="1" Grid.Column="1"
+                Click="btnDelete_Click"/>
     </Grid>
 </Page>

@@ -12,6 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="AnimalTypeId" Type="int" Nullable="false" />
+          <Property Name="Image" Type="varbinary(max)" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AnimalArtist">
@@ -39,8 +40,9 @@
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
-          <Property Name="RoleId" Type="int" Nullable="false" />
+          <Property Name="Image" Type="varbinary(max)" />
           <Property Name="Salary" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ArtistPerfomance">
@@ -347,6 +349,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AnimalTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AnimalType" Relationship="CircusModel.FK_Animal_AnimalType" FromRole="Animal" ToRole="AnimalType" />
           <NavigationProperty Name="AnimalArtists" Relationship="CircusModel.FK_AnimalArtist_Animal" FromRole="Animal" ToRole="AnimalArtist" />
@@ -380,8 +383,9 @@
           <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="Salary" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
           <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AnimalArtists" Relationship="CircusModel.FK_AnimalArtist_Artist" FromRole="Artist" ToRole="AnimalArtist" />
           <NavigationProperty Name="Role" Relationship="CircusModel.FK_Artist_Role" FromRole="Artist" ToRole="Role" />
@@ -595,6 +599,7 @@
             <EntityTypeMapping TypeName="CircusModel.Animal">
               <MappingFragment StoreEntitySet="Animal">
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="AnimalTypeId" ColumnName="AnimalTypeId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -623,8 +628,9 @@
             <EntityTypeMapping TypeName="CircusModel.Artist">
               <MappingFragment StoreEntitySet="Artist">
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="Salary" ColumnName="Salary" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />

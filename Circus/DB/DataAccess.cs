@@ -11,11 +11,11 @@ namespace Circus.DB
         public delegate void NewItemAdded();
         public static event NewItemAdded NewItemAddedEvent;
 
-        public static List<Perfomance> GetPerfomances() => CircusEntities.GetContext().Perfomances.ToList();
+        public static List<Perfomance> GetPerfomances() => CircusEntities.GetContext().Perfomances.ToList().FindAll(x => !x.IsDeleted);
         public static List<City> GetCities() => CircusEntities.GetContext().Cities.ToList();
-        public static List<Animal> GetAnimals() => CircusEntities.GetContext().Animals.ToList();
+        public static List<Animal> GetAnimals() => CircusEntities.GetContext().Animals.ToList().FindAll(x => !x.IsDeleted);
         public static List<AnimalType> GetAnimalTypes() => CircusEntities.GetContext().AnimalTypes.ToList();
-        public static List<Artist> GetArtists() => CircusEntities.GetContext().Artists.ToList();
+        public static List<Artist> GetArtists() => CircusEntities.GetContext().Artists.ToList().FindAll(x => !x.IsDeleted);
         public static List<Role> GetRoles() => CircusEntities.GetContext().Roles.ToList();
         public static List<User> GetUsers() => CircusEntities.GetContext().Users.ToList();
 

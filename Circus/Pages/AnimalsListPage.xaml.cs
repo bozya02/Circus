@@ -33,6 +33,9 @@ namespace Circus.Pages
 
             DataAccess.NewItemAddedEvent += DataAccess_NewItemAddedEvent;
 
+            if (!App.User.IsAdmin)
+                btnNewAnimal.Visibility = Visibility.Collapsed;
+
             this.DataContext = this;
         }
 

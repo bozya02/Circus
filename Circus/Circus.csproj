@@ -134,6 +134,7 @@
     <Compile Include="DB\Artist.cs">
       <DependentUpon>CircusModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\ArtistPartial.cs" />
     <Compile Include="DB\ArtistPerfomance.cs">
       <DependentUpon>CircusModel.tt</DependentUpon>
     </Compile>
