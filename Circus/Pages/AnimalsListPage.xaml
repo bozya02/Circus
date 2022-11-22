@@ -31,7 +31,13 @@
                       materialDesign:HintAssist.Hint="Тип"
                       ItemsSource="{Binding AnimalTypes}"
                       SelectedIndex="0"
-                      SelectionChanged="cbType_SelectionChanged"/>
+                      SelectionChanged="cbType_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <Button x:Name="btnNewAnimal" Content="Добавить"
                     Grid.Column="2" FontSize="20" MinHeight="40"
@@ -43,7 +49,27 @@
                   SelectionChanged="lvAnimals_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="Фото">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Image}" MaxHeight="100" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Имя">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" FontSize="30" Margin="0 25"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Тип">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding AnimalType.Name}" FontSize="30" Margin="0 25"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

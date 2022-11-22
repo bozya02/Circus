@@ -27,10 +27,10 @@ namespace Circus
 
             frame.NavigationService.Navigate(new AuthorizationPage());
 
-            frame.Navigated += FrameNav_Navigated;
+            frame.Navigated += Frame_Navigated;
         }
 
-        private void FrameNav_Navigated(object sender, NavigationEventArgs e)
+        private void Frame_Navigated(object sender, NavigationEventArgs e)
         {
             var content = frame.Content as Page;
 
@@ -45,13 +45,13 @@ namespace Circus
             {
                 btnBack.Visibility = Visibility.Visible;
                 btnForward.Visibility = Visibility.Collapsed;
-                btnExit.Visibility = Visibility.Collapsed;
                 spNavigation.Visibility = Visibility.Hidden;
             }
             else
             {
                 btnBack.Visibility = Visibility.Visible;
                 btnForward.Visibility = Visibility.Visible;
+                btnExit.Visibility = Visibility.Visible;
                 spNavigation.Visibility = Visibility.Visible;
             }
 

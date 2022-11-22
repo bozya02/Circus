@@ -72,7 +72,7 @@ namespace Circus.Pages
             if (Animal.AnimalType == null)
                 sb.AppendLine("Нужно выбрать тип животного!");
 
-            if (sb.Length != null)
+            if (sb.Length != 0)
             {
                 MessageBox.Show(sb.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

@@ -31,6 +31,8 @@ namespace Circus.Pages
             Animals = DataAccess.GetAnimals();
             AnimalTypes = DataAccess.GetAnimalTypes();
 
+            AnimalTypes.Insert(0, new AnimalType { Name = "Все животные" });
+
             DataAccess.NewItemAddedEvent += DataAccess_NewItemAddedEvent;
 
             if (!App.User.IsAdmin)
@@ -71,7 +73,10 @@ namespace Circus.Pages
             if (type == null)
                 return;
 
-            var animals = Animals.FindAll(x => x.Name.ToLower().Contains(animalName) && x.AnimalType == type);
+            var animals = Animals.FindAll(x => x.Name.ToLower().Contains(animalName));
+
+            if (type.Name != "Все животные")
+                animals = animals.FindAll(x => x.AnimalType == type);
 
             lvAnimals.ItemsSource = animals;
             lvAnimals.Items.Refresh();
