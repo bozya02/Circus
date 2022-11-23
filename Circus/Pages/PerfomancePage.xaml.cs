@@ -76,6 +76,7 @@ namespace Circus.Pages
             {
                 btnDelete.Visibility = Visibility.Collapsed;
                 btnSave.Visibility = Visibility.Collapsed;
+                tbTotalGain.Visibility = Visibility.Collapsed;
             }
 
             if (Perfomance.IsSaleReady)

@@ -141,11 +141,16 @@
                  Visibility="Hidden" IsEnabled="False"
                  materialDesign:HintAssist.Hint="Осталось билетов"/>
 
-        <TextBox x:Name="tbTickerPrice"
-                 Text="{Binding Perfomance.TicketPrice, StringFormat={}{0} руб.}"
-                 Grid.Row="4" Grid.Column="2"
-                 Padding="10" FontSize="20" IsEnabled="False"
-                 materialDesign:HintAssist.Hint="Цена билета"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="2">
+            <TextBox x:Name="tbTickerPrice"
+                     Text="{Binding Perfomance.TicketPrice, StringFormat={}{0} руб.}"
+                     Padding="10" FontSize="20" IsEnabled="False"
+                     materialDesign:HintAssist.Hint="Цена билета"/>
+            <TextBox x:Name="tbTotalGain"
+                     Text="{Binding Perfomance.TotalGain, StringFormat={}{0} руб.}"
+                     Padding="10" FontSize="20" IsEnabled="False"
+                     materialDesign:HintAssist.Hint="Сборы"/>
+        </StackPanel>
 
         <Button x:Name="btnSave" Content="Сохранить"
                 MinWidth="200" MinHeight="40"

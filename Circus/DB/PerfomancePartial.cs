@@ -19,5 +19,11 @@ namespace Circus.DB
             get => TicketQuantity - Tickets.Count();
             set { }
         }
+
+        public double TotalGain
+        {
+            get => Tickets.Count * TicketPrice;
+            set { }
+        }
     }
 }

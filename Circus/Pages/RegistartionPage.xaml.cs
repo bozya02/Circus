@@ -49,7 +49,7 @@ namespace Circus.Pages
             if (string.IsNullOrWhiteSpace(user.Password))
                 sb.AppendLine("Пароль не должен быть пустым!");
             else if (user.Password.Length < 6)
-                sb.AppendLine("Паротль должен содержать минимум 6 символов");
+                sb.AppendLine("Пароль должен содержать минимум 6 символов");
             if (DataAccess.IsLoginUnique(user.Login))
                 sb.AppendLine("Этот логин занят, выберите другой!");
             if (user.Password != pbSecondPassword.Password)
