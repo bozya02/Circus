@@ -205,7 +205,7 @@ namespace Circus.Pages
             if (artistPerfomance == null)
                 return;
 
-            var result = MessageBox.Show($"Вы точно хотите убрать {artistPerfomance.Artist.Nickname} из выступдения?", "Предупреждение",
+            var result = MessageBox.Show($"Вы точно хотите убрать {artistPerfomance.Artist.Nickname} из выступления?", "Предупреждение",
                                          MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes)
@@ -236,15 +236,29 @@ namespace Circus.Pages
 
         private void tbTicketQuantity_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Perfomance.TicketQuantity = int.Parse(tbTicketQuantity.Text);
-            tbTickerPrice.Text = $"{Perfomance.TicketPrice} руб.";
+            try
+            {
+                Perfomance.TicketQuantity = int.Parse(tbTicketQuantity.Text == "" ? "0" : tbTicketQuantity.Text);
+                tbTickerPrice.Text = $"{Perfomance.TicketPrice} руб.";
+            }
+            catch
+            {
+            }
+            
         }
 
         private void cbAnimal_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var animalArtist = e.AddedItems[0] as AnimalArtist;
+            try
+            {
+                var animalArtist = e.AddedItems[0] as AnimalArtist;
 
-            ((sender as ComboBox).DataContext as ArtistPerfomance).AnimalArtist = animalArtist;
+                ((sender as ComboBox).DataContext as ArtistPerfomance).AnimalArtist = animalArtist;
+            }
+            catch
+            {
+
+            }
         }
     }
 }

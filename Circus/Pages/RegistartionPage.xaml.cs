@@ -40,9 +40,9 @@ namespace Circus.Pages
 
             StringBuilder sb = new StringBuilder();
 
-            if (string.IsNullOrWhiteSpace(user.FirstName))
-                sb.AppendLine("Фамилия не должна быть пустой!");
             if (string.IsNullOrWhiteSpace(user.LastName))
+                sb.AppendLine("Фамилия не должна быть пустой!");
+            if (string.IsNullOrWhiteSpace(user.FirstName))
                 sb.AppendLine("Имя не должно быть пустым!");
             if (string.IsNullOrWhiteSpace(user.Login))
                 sb.AppendLine("Логин не должен быть пустым!");

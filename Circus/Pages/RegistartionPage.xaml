@@ -20,9 +20,9 @@
         </Grid.RowDefinitions>
 
         <StackPanel VerticalAlignment="Center">
-            <TextBox x:Name="tbFirstName" Margin="10 20"
-                     materialDesign:HintAssist.Hint="Фамилия"/>
             <TextBox x:Name="tbLastName" Margin="10 20"
+                     materialDesign:HintAssist.Hint="Фамилия"/>
+            <TextBox x:Name="tbFirstName" Margin="10 20"
                      materialDesign:HintAssist.Hint="Имя"/>
             <TextBox x:Name="tbPatronymic" Margin="10 20"
                      materialDesign:HintAssist.Hint="Отчество"/>

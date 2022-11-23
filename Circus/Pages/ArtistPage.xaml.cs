@@ -76,7 +76,7 @@ namespace Circus.Pages
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (DataAccess.CanDeleteArtist(Artist))
+            if (!DataAccess.CanDeleteArtist(Artist))
             {
                 MessageBox.Show("Нельзя удалить этого артиста.\nУ него есть пердстоящие выступления.", "Ошибка", MessageBoxButton.OKCancel, MessageBoxImage.Error);
                 return;

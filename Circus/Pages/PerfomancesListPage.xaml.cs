@@ -33,12 +33,12 @@ namespace Circus.Pages
             Sortings = new Dictionary<string, Func<Perfomance, object>>
             {
                 { "Без сортировки", x => x.Id },
-                { "Название по возрастания", x => x.Tickets },
-                { "Название по убыванию", x => x.Tickets },      //reverse
-                { "Цена билета по возрастания", x => x.Tickets },
-                { "Цена билета по убыванию", x => x.Tickets },      //reverse
-                { "Количество мест по возрастания", x => x.Tickets },
-                { "Количество мест по убыванию", x => x.City },      //reverse
+                { "Название по возрастания", x => x.Name },
+                { "Название по убыванию", x => x.Name },      //reverse
+                { "Цена билета по возрастания", x => x.TicketPrice },
+                { "Цена билета по убыванию", x => x.TicketPrice },      //reverse
+                { "Количество мест по возрастания", x => x.TicketRemainder },
+                { "Количество мест по убыванию", x => x.TicketRemainder },      //reverse
                 { "Дата проведения по возрастания", x => x.Date },
                 { "Дата проведения по убыванию", x => x.Date },     //reserse
             };
@@ -108,8 +108,8 @@ namespace Circus.Pages
                 perfomances = perfomances.FindAll(x => x.Date + x.StartTime > DateTime.Now);
 
             perfomances = (cbSorting.SelectedItem as string).ToLower().Contains("убыванию") ? 
-                          perfomances.OrderBy(sorting).ToList() :
-                          perfomances.OrderByDescending(sorting).ToList();
+                          perfomances.OrderByDescending(sorting).ToList() :
+                          perfomances.OrderBy(sorting).ToList();
 
 
             lvPerfomances.ItemsSource = perfomances;

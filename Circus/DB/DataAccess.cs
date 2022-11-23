@@ -116,7 +116,7 @@ namespace Circus.DB
 
             foreach (var artistPerfomance in artist.ArtistPerfomances)
             {
-                if (CanDeletePerfomance(artistPerfomance.Perfomance))
+                if (CanDeletePerfomance(artistPerfomance.Perfomance) || artistPerfomance.Perfomance.IsDeleted)
                 {
                     canDelete = true;
                     break;
@@ -140,8 +140,15 @@ namespace Circus.DB
 
         public static void DeleteArtistPerfomance(ArtistPerfomance artistPerfomance)
         {
-            CircusEntities.GetContext().ArtistPerfomances.Remove(artistPerfomance);
-            CircusEntities.GetContext().SaveChanges();
+            try
+            {
+                CircusEntities.GetContext().ArtistPerfomances.Remove(artistPerfomance);
+                CircusEntities.GetContext().SaveChanges();
+            }
+            catch
+            {
+
+            }
         }
 
         public static void DeleteTicket(Ticket ticket)
