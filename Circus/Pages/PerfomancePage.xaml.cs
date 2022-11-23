@@ -45,10 +45,12 @@ namespace Circus.Pages
             else
             {
                 Title = $"{Title} {Perfomance.Name}";
-                checkSaleReady.Visibility = Visibility.Hidden;
+                checkSaleReady.Visibility = Visibility.Visible;
             }
 
             dpDate.DisplayDateStart = DateTime.Now;
+            tpStartTime.SelectedTime = DateTime.Today + Perfomance.StartTime;
+            tpEndTime.SelectedTime = DateTime.Today + Perfomance.EndTime;
 
             ChangeEnable();
 
@@ -68,7 +70,14 @@ namespace Circus.Pages
             checkSaleReady.IsEnabled = enable;
             tbTicketQuantity.IsEnabled = enable;
             cbArtist.IsEnabled = enable;
+            lvArtistPerfomance.IsEnabled = enable;
             
+            if (!App.User.IsAdmin)
+            {
+                btnDelete.Visibility = Visibility.Collapsed;
+                btnSave.Visibility = Visibility.Collapsed;
+            }
+
             if (Perfomance.IsSaleReady)
             {
                 tbTicketQuantity.Visibility = Visibility.Hidden;
@@ -89,6 +98,8 @@ namespace Circus.Pages
                 sb.AppendLine("Некорректное время окончания!");
             if (Perfomance.EndTime - Perfomance.StartTime < TimeSpan.FromHours(1))
                 sb.AppendLine("Продолжительность выступления должна быть минимум 1 час!");
+            if (Perfomance.City == null)
+                sb.AppendLine("Город не выбран!");
             if (Perfomance.ArtistPerfomances.Count == 0)
                 sb.AppendLine("Добавьте минимум одного артиста!");
 
@@ -104,7 +115,7 @@ namespace Circus.Pages
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (DataAccess.CanDeletePerfomance(Perfomance))
+            if (!DataAccess.CanDeletePerfomance(Perfomance))
             {
                 MessageBox.Show("Нельзя удалить это выступление!\nУ него есть проданные билеты.", "Ошибка", MessageBoxButton.OKCancel, MessageBoxImage.Error);
                 return;
@@ -143,7 +154,14 @@ namespace Circus.Pages
 
         private void btnBuyTicket_Click(object sender, RoutedEventArgs e)
         {
-            var result = MessageBox.Show($"Вы точно хотите убрать купить билет?", "Предупреждение",
+            if (Perfomance.Tickets.Count() >= Perfomance.TicketQuantity)
+            {
+                MessageBox.Show($"Все билеты проданы!", "Ошибка",
+                                         MessageBoxButton.OKCancel, MessageBoxImage.Error);
+                return;
+            }
+
+            var result = MessageBox.Show($"Вы точно хотите купить билет?", "Предупреждение",
                                          MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes)
@@ -173,6 +191,8 @@ namespace Circus.Pages
 
             lvArtistPerfomance.ItemsSource = Perfomance.ArtistPerfomances;
             lvArtistPerfomance.Items.Refresh();
+
+            tbTickerPrice.Text = Perfomance.TicketPrice.ToString();
         }
 
         private void lvArtistPerfomance_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -196,16 +216,35 @@ namespace Circus.Pages
 
             lvArtistPerfomance.ItemsSource = Perfomance.ArtistPerfomances;
             lvArtistPerfomance.Items.Refresh();
+
+            tbTickerPrice.Text = $"{Perfomance.TicketPrice} руб.";
         }
 
         private void tpStartTime_SelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
         {
+            if (tpStartTime.SelectedTime == null)
+                return;
             Perfomance.StartTime = tpStartTime.SelectedTime.Value.TimeOfDay;
         }
 
         private void tpEndTime_SelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
         {
+            if (tpEndTime.SelectedTime == null)
+                return;
             Perfomance.EndTime = tpEndTime.SelectedTime.Value.TimeOfDay;
+        }
+
+        private void tbTicketQuantity_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Perfomance.TicketQuantity = int.Parse(tbTicketQuantity.Text);
+            tbTickerPrice.Text = $"{Perfomance.TicketPrice} руб.";
+        }
+
+        private void cbAnimal_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var animalArtist = e.AddedItems[0] as AnimalArtist;
+
+            ((sender as ComboBox).DataContext as ArtistPerfomance).AnimalArtist = animalArtist;
         }
     }
 }

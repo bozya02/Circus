@@ -102,10 +102,10 @@ namespace Circus.Pages
             var perfomances = Perfomances.FindAll(x => x.Name.ToLower().Contains(perfomanceName));
 
             if (city.Name != "Все города")
-                perfomances = Perfomances.FindAll(x => x.City == city);
+                perfomances = perfomances.FindAll(x => x.City == city);
 
             if (isActual)
-                perfomances = Perfomances.FindAll(x => x.Date > DateTime.Now);
+                perfomances = perfomances.FindAll(x => x.Date + x.StartTime > DateTime.Now);
 
             perfomances = (cbSorting.SelectedItem as string).ToLower().Contains("убыванию") ? 
                           perfomances.OrderBy(sorting).ToList() :

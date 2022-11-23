@@ -76,19 +76,23 @@
                     <GridViewColumn Header="Название">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}" FontSize="30" Margin="0 25"/>
+                                <TextBlock Text="{Binding Name}" FontSize="24" Margin="0 30"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Дата">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Date, StringFormat=d, ConverterCulture=ru}" FontSize="30" Margin="0 25"/>
-                                    <TextBlock FontSize="30" Margin="0 25">
-                                        <Run Text="{Binding StartTime, StringFormat=T, ConverterCulture=ru}"/>
+                                <StackPanel Margin="0 15">
+                                    <TextBlock Text="{Binding Date, StringFormat=d, ConverterCulture=ru}" FontSize="24"/>
+                                    <TextBlock FontSize="24">
+                                        <Run Text="{Binding StartTime, StringFormat=hh, ConverterCulture=ru}"/>
+                                        <Run Text=":"/>
+                                        <Run Text="{Binding StartTime, StringFormat=mm, ConverterCulture=ru}"/>
                                         <Run Text="-"/>
-                                        <Run Text="{Binding EndTime, StringFormat=T, ConverterCulture=ru}"/>
+                                        <Run Text="{Binding EndTime, StringFormat=hh, ConverterCulture=ru}"/>
+                                        <Run Text=":"/>
+                                        <Run Text="{Binding EndTime, StringFormat=mm, ConverterCulture=ru}"/>
                                     </TextBlock>
                                 </StackPanel>
                             </DataTemplate>
@@ -97,14 +101,14 @@
                     <GridViewColumn Header="Город">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding City.Name}" FontSize="30" Margin="0 25"/>
+                                <TextBlock Text="{Binding City.Name}" FontSize="24" Margin="0 25"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Цена билета">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding TicketPrice, StringFormat={}{0} руб.}" FontSize="30" Margin="0 25"/>
+                                <TextBlock Text="{Binding TicketPrice, StringFormat={}{0} руб.}" FontSize="24" Margin="0 25"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

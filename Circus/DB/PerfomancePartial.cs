@@ -9,7 +9,15 @@ namespace Circus.DB
     public partial class Perfomance
     {
         public double Cost => ArtistPerfomances.Sum(x => (double)x.Artist.Salary) * 1.4;
-        public double TicketPrice => Cost / TicketQuantity;
-        public int TicketRemainder => TicketQuantity - Tickets.Count();
+        public double TicketPrice
+        {
+            get => Cost / TicketQuantity;
+            set { }
+        }
+        public int TicketRemainder
+        {
+            get => TicketQuantity - Tickets.Count();
+            set { }
+        }
     }
 }

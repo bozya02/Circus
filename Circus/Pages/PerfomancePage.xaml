@@ -23,7 +23,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -49,15 +49,13 @@
                                    Margin="10" Padding="10"
                                    Is24Hours="True"
                                    materialDesign:HintAssist.Hint="Время начала"
-                                   SelectedTimeChanged="tpStartTime_SelectedTimeChanged"
-                                   SelectedTime="{Binding Perfomance.StartTime}"/>
+                                   SelectedTimeChanged="tpStartTime_SelectedTimeChanged"/>
 
         <materialDesign:TimePicker x:Name="tpEndTime" Grid.Row="3"
                                    Margin="10" Padding="10"
                                    Is24Hours="True"
                                    materialDesign:HintAssist.Hint="Время окончания"
-                                   SelectedTimeChanged="tpEndTime_SelectedTimeChanged"
-                                   SelectedTime="{Binding Perfomance.EndTime}"/>
+                                   SelectedTimeChanged="tpEndTime_SelectedTimeChanged"/>
 
         <ComboBox x:Name="cbCity" Grid.Row="4"
                   Margin="10" Padding="10" FontSize="24"
@@ -106,33 +104,45 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding Artist.Image}" MaxHeight="70"/>
+                        <Image Source="{Binding Artist.Image}" MaxWidth="70"/>
                         <TextBlock Text="{Binding Artist.Nickname}" Margin="10 20"/>
-                        <ComboBox ItemsSource="{Binding Artist.NotDeletedAnimalArtists}" FontSize="16" Margin="10 20">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
+                        <StackPanel>
+                            <TextBlock>
+                                <Run Text="{Binding AnimalArtist.Animal.Name}"/>
+                                <Run Text="{Binding AnimalArtist.Animal.AnimalType.Name}"/>
+                            </TextBlock>
+                            <ComboBox x:Name="cbAnimal" ItemsSource="{Binding Artist.NotDeletedAnimalArtists}"
+                                      FontSize="16" MaxWidth="100"
+                                      materialDesign:HintAssist.Hint="Животное"
+                                      SelectionChanged="cbAnimal_SelectionChanged">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
                                         <Run Text="{Binding Animal.Name}"/>
                                         <Run Text="{Binding Animal.AnimalType.Name}"/>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <TextBox x:Name="tbTicketQuantity" Text="{Binding TicketQuantity}"
+        <TextBox x:Name="tbTicketQuantity" Text="{Binding Perfomance.TicketQuantity}"
                  Grid.Row="3" Grid.Column="2" Padding="10"
-                 materialDesign:HintAssist.Hint="Количество билетов"/>
-        
-        <TextBox x:Name="tbTicketRemainder" Text="{Binding TicketRemainder}"
+                 materialDesign:HintAssist.Hint="Количество билетов"
+                 TextChanged="tbTicketQuantity_TextChanged"/>
+
+        <TextBox x:Name="tbTicketRemainder"
+                 Text="{Binding Perfomance.TicketRemainder}"
                  Grid.Row="3" Grid.Column="2" Padding="10"
                  Visibility="Hidden" IsEnabled="False"
                  materialDesign:HintAssist.Hint="Осталось билетов"/>
 
-        <TextBox x:Name="tbTickerPrice" Text="{Binding TicketPrice}"
+        <TextBox x:Name="tbTickerPrice"
+                 Text="{Binding Perfomance.TicketPrice, StringFormat={}{0} руб.}"
                  Grid.Row="4" Grid.Column="2"
                  Padding="10" FontSize="20" IsEnabled="False"
                  materialDesign:HintAssist.Hint="Цена билета"/>
