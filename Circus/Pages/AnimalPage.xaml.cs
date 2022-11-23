@@ -41,7 +41,12 @@ namespace Circus.Pages
             else
                 Title = $"{Title} {Animal.Name}";
 
-            grid.IsEnabled = App.User.IsAdmin;
+
+            if (!App.User.IsAdmin)
+            {
+                grid.IsEnabled = false;
+                btnDelete.Visibility = Visibility.Collapsed;
+            }
 
             this.DataContext = this;
         }

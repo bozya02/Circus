@@ -44,7 +44,10 @@ namespace Circus.Pages
                 Title = $"{Title} {Artist.Nickname}";
 
             if (!App.User.IsAdmin)
+            {
                 grid.IsEnabled = false;
+                btnDelete.Visibility = Visibility.Collapsed;
+            }
 
             this.DataContext = this;
         }
