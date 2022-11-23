@@ -14,7 +14,8 @@ namespace Circus.Services
     {
         public static Bitmap GenerateQRCode(Ticket ticket)
         {
-            var content = $"{ticket.Perfomance.Name} " +
+            var content = $"{ticket.Id} " +
+                          $"{ticket.Perfomance.Name} " +
                           $"{ticket.Perfomance.Date.ToShortDateString()} " +
                           $"{ticket.Perfomance.StartTime}-" +
                           $"{ticket.Perfomance.EndTime} " +
