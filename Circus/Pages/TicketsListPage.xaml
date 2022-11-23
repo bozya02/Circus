@@ -9,6 +9,16 @@
       Title="Список билетов">
 
     <Grid>
-        
+        <ListView x:Name="lvTickets"
+                  ItemsSource="{Binding Tickets}"
+                  SelectionChanged="lvTickets_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Выступление" DisplayMemberBinding="{Binding Perfomance.Name}"/>
+                    <GridViewColumn Header="Посетитель" DisplayMemberBinding="{Binding User.FullName}"/>
+                    <GridViewColumn Header="Цена билета" DisplayMemberBinding="{Binding Perfomance.TicketPrice, StringFormat={}{0} руб.}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Page>

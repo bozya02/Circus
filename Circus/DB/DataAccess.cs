@@ -18,6 +18,7 @@ namespace Circus.DB
         public static List<Artist> GetArtists() => CircusEntities.GetContext().Artists.ToList().FindAll(x => !x.IsDeleted);
         public static List<Role> GetRoles() => CircusEntities.GetContext().Roles.ToList();
         public static List<Ticket> GetTickets() => CircusEntities.GetContext().Tickets.ToList();
+        public static List<Ticket> GetTickets(User user) => GetTickets().FindAll(x => x.User == user);
         public static List<User> GetUsers() => CircusEntities.GetContext().Users.ToList();
 
 

@@ -92,7 +92,7 @@ namespace Circus
 
         private void btnTickets_Click(object sender, RoutedEventArgs e)
         {
-
+            frame.NavigationService.Navigate(new TicketsListPage());
         }
     }
 }
