@@ -52,12 +52,12 @@ namespace Circus.Pages
             tpStartTime.SelectedTime = DateTime.Today + Perfomance.StartTime;
             tpEndTime.SelectedTime = DateTime.Today + Perfomance.EndTime;
 
-            ChangeEnable();
+            ChangeEnable(isNew);
 
             this.DataContext = this;
         }
 
-        private void ChangeEnable()
+        private void ChangeEnable(bool isNew)
         {
             var enable = !Perfomance.IsSaleReady && App.User.IsAdmin;
 
@@ -84,7 +84,15 @@ namespace Circus.Pages
                 tbTicketQuantity.Visibility = Visibility.Hidden;
                 tbTicketRemainder.Visibility = Visibility.Visible;
                 btnBuyTicket.Visibility = Visibility.Visible;
-            }    
+            }
+            
+            if (Perfomance.Date + Perfomance.StartTime < DateTime.Now && !isNew)
+            {
+                btnBuyTicket.Visibility = Visibility.Collapsed;
+                btnDelete.Visibility = Visibility.Collapsed;
+                btnSave.Visibility = Visibility.Collapsed;
+                grid.IsEnabled = false;
+            }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -253,7 +261,9 @@ namespace Circus.Pages
             try
             {
                 var animalArtist = e.AddedItems[0] as AnimalArtist;
+                
 
+                (sender as ComboBox).SelectedItem = animalArtist;
                 ((sender as ComboBox).DataContext as ArtistPerfomance).AnimalArtist = animalArtist;
             }
             catch

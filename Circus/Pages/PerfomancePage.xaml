@@ -19,7 +19,7 @@
             </Style>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid>
+    <Grid x:Name="grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -114,6 +114,7 @@
                             <ComboBox x:Name="cbAnimal" ItemsSource="{Binding Artist.NotDeletedAnimalArtists}"
                                       FontSize="16" MaxWidth="100"
                                       materialDesign:HintAssist.Hint="Животное"
+                                      SelectedItem="{Binding ElementName=lvArtistPerfomance, Path=AnimalArtist}"
                                       SelectionChanged="cbAnimal_SelectionChanged">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
